@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &925438729243773649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 925438729243774255}
+  - component: {fileID: 925438729243773648}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &925438729243774255
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925438729243773649}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.41, y: 0, z: 0.4599992}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &925438729243773648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925438729243773649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d23b551e983fb9a45a4e9fd195d5701e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemiesList: []
+  _enemiesContainer: {fileID: 0}
+  enemyToControl: {fileID: 0}
+  scientificToControl: {fileID: 0}
+  guardToControl: {fileID: 0}
+  roomsList: []
+  _spawnsList: []
+  enemyPos: {fileID: 0}
+  _enemyToSelect: 0
+  girlObject: {fileID: 0}
+  girl: {fileID: 0}
+  boyObject: {fileID: 0}
+  boy: {fileID: 0}
+  isChanged: 0
+  baseColor: {r: 0, g: 0, b: 0, a: 1}
+  previousObject: {fileID: 0}
+  previousRender: {fileID: 0}
+  cam: {fileID: 0}
+  _alarmsList: []
+  lightsContainer: {fileID: 0}
+  maxLightTime: 20
+  maxLightIntensity: 300
+  minLightIntensity: 0
+  lightDefaultIntensity: 100
+  lightsSpeed: 100
+  loseText: {fileID: 0}

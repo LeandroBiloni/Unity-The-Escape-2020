@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8576091069624077055
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8576091069624077569}
+  - component: {fileID: 8576091069624077054}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8576091069624077569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8576091069624077055}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.41, y: 0, z: 0.4599992}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8576091069624077054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8576091069624077055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d23b551e983fb9a45a4e9fd195d5701e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemiesList: []
+  _enemiesContainer: {fileID: 0}
+  enemyToControl: {fileID: 0}
+  scientificToControl: {fileID: 0}
+  guardToControl: {fileID: 0}
+  roomsList: []
+  _spawnsList: []
+  enemyPos: {fileID: 0}
+  controllingEnemy: 0
+  _enemyToSelect: 0
+  girlObject: {fileID: 0}
+  girl: {fileID: 0}
+  boyObject: {fileID: 0}
+  boy: {fileID: 0}
+  isChanged: 0
+  baseColor: {r: 0, g: 0, b: 0, a: 1}
+  previousObject: {fileID: 0}
+  previousRender: {fileID: 0}
+  cam: {fileID: 0}
+  _alarmsList: []
+  lightsContainer: {fileID: 0}
+  _lightTime: 0
+  maxLightTime: 20
+  maxLightIntensity: 300
+  minLightIntensity: 0
+  lightDefaultIntensity: 100
+  lightsSpeed: 100
+  alarmOn: 0
+  alarmSound: {fileID: 8300000, guid: 77666f7ad6b0b1c4cbd9f7276ac1a9b8, type: 3}
+  music: {fileID: 8300000, guid: d9ccafbc5d231c34f84fea2390fedfcc, type: 3}
+  step1: {fileID: 8300000, guid: 1a252f8959c1c3540920e73ce610e1f9, type: 3}
+  step2: {fileID: 8300000, guid: 33b28da9b46728745b5ae67609b54666, type: 3}
+  audioManager: {fileID: 0}
+  girlIcon: {fileID: 0}
+  girlIconOff: {fileID: 0}
+  boyIcon: {fileID: 0}
+  boyIconOff: {fileID: 0}
