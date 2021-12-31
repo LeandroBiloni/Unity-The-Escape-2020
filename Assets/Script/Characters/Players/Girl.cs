@@ -10,15 +10,20 @@ public class Girl : Character
 	[SerializeField] private KeyCode _previousTargetKey;
 	[SerializeField] private KeyCode _controlEnemyKey;
 	[SerializeField] private float _controlMaxTime;
-    private bool _controllingEnemy;
+	[SerializeField] private float _controlCooldown;
+	private bool _canControlEnemy = true;
+	private bool _controllingEnemy;
+	[SerializeField] private bool _inCooldown;
 
     private bool _enemyInFOV;
     private int _enemyTargetIndex;
-    [SerializeField] private BaseEnemy _selectedEnemy;
+    private BaseEnemy _selectedEnemy;
 
     public delegate void Control(GameObject target);
-
     public event Control OnControlChange;
+
+    public delegate void Timer(float value);
+    public event Timer OnTimerRunning;
     protected override void Start()
     {
         base.Start();
@@ -36,10 +41,17 @@ public class Girl : Character
         
         CheckEnemyInFOV();
 
-        if (Input.GetKeyDown(_controlEnemyKey) && _selectedEnemy)
-	        ControlEnemy();
+        if (!_inCooldown && Input.GetKeyDown(_controlEnemyKey))
+        {
+	        if (_selectedEnemy && !_controllingEnemy)
+		        ControlEnemy();
 
-        if (_enemyInFOV && !_controllingEnemy)
+	        else if (_controllingEnemy)
+		        CancelEnemyControl();
+        }
+	        
+
+        if (_canControlEnemy && _enemyInFOV && !_controllingEnemy)
         {
 	        if (Input.GetKeyDown(_nextTargetKey))
 		        NextTarget();
@@ -57,43 +69,109 @@ public class Girl : Character
     public override void Deselect()
     {
         base.Deselect();
-        _animator.SetFloat("VelZ", 0);
-        _animator.SetFloat("VelX", 0);
+        if (_animator)
+        {
+	        _animator.SetFloat("VelZ", 0);
+	        _animator.SetFloat("VelX", 0);
+        }
     }
     
     private void ControlEnemy()
     {
-	    if (!_selectedEnemy) return;
+	    if (_controllingEnemy || _inCooldown) return;
 	    
+	    Debug.Log("control enemy");
 	    //If not controlling an enemy controls it.
-	    if (_controllingEnemy == false)
+	    if (_canControlEnemy)
 	    {
 		    _animator.SetTrigger("Poder");
 		    _controllingEnemy = true;
+		    _canControlEnemy = false;
 		    _canMove = false;
 		    OnControlChange?.Invoke(_selectedEnemy.gameObject);
 		    
 		    _selectedEnemy.Select();
-		    
-		    StartCoroutine(ControlTimer());
+		    StartTimer();
 	    }
+	    
+    }
+
+    private void CancelEnemyControl()
+    {
+	    if (!_controllingEnemy) return;
+	    
+	    Debug.Log("control enemy cancel");
 	    //If controlling an enemy, cancels the control.
-	    else
-	    {
-		    _controllingEnemy = false;
-		    _canMove = true;
-		    OnControlChange?.Invoke(gameObject);
-		    StopCoroutine(ControlTimer());
-		    _selectedEnemy.Deselect();
-		    StartCoroutine(ActivateSelectionIconWithTimer());
-	    }
+	    _canMove = true;
+	    _controllingEnemy = false;
+	    OnControlChange?.Invoke(gameObject);
+	    _inCooldown = true;
+	    StopTimer();
+	    OnTimerRunning?.Invoke(0);
+	    
+	    if (_selectedEnemy) _selectedEnemy.Deselect();
+	    
+	    StartCooldown();
+	    StartCoroutine(ActivateSelectionIconWithTimer());
+    }
+
+    void StopTimer()
+    {
+	    StopCoroutine(ControlTimer());
+    }
+
+    void StartTimer()
+    {
+	    StartCoroutine(ControlTimer());
+    }
+
+    void StartCooldown()
+    {
+	    StartCoroutine(ControlCooldown());
     }
 
     IEnumerator ControlTimer()
     {
-	    yield return new WaitForSeconds(_controlMaxTime);
+	    Debug.Log("control timer");
 	    
-	    ControlEnemy();
+	    if (!_controllingEnemy) yield break;
+	    
+	    float time = _controlMaxTime;
+
+	    while (time > 0)
+	    {
+		    if (_inCooldown) yield break;
+		    Debug.Log("control timer --");
+		    time -= Time.deltaTime;
+
+		    var value = time / _controlMaxTime;
+		    OnTimerRunning?.Invoke(value);
+
+		    yield return new WaitForEndOfFrame();
+	    }
+	    CancelEnemyControl();
+    }
+
+    IEnumerator ControlCooldown()
+    {
+	    
+	    float time = 0;
+
+	    while (time < _controlCooldown)
+	    {
+		    time += Time.deltaTime;
+
+		    var value = time / _controlCooldown;
+		    
+		    OnTimerRunning?.Invoke(value);
+
+		    yield return new WaitForEndOfFrame();
+	    }
+
+	    _inCooldown = false;
+	    _canControlEnemy = true;
+	    OnTimerRunning?.Invoke(1);
+	    
     }
 
     void CheckEnemyInFOV()

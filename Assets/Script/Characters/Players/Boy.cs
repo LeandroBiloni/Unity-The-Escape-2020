@@ -80,8 +80,12 @@ public class Boy : Character
     public override void Deselect()
     {
         base.Deselect();
-        _animator.SetFloat("VelZ", 0);
-        _animator.SetFloat("VelX", 0);
+        if (_animator)
+        {
+            _animator.SetFloat("VelZ", 0);
+            _animator.SetFloat("VelX", 0);  
+        }
+        
     }
     /// <summary>
     /// Activates Telekinesis ability.
@@ -116,7 +120,9 @@ public class Boy : Character
                 {
                     _holdingObject = true;
                     _pulling = false;
-                    _currentObject.GetComponent<MovableObjects>().Deselected();
+                    var currObj = _currentObject.GetComponent<MovableObjects>();
+                    currObj.Deselected();
+                    currObj.Interaction(true);
                     currentObjectTransform.parent = _powerPoint;
                     var objRb = _currentObject.GetComponent<Rigidbody>();
                     objRb.constraints = RigidbodyConstraints.FreezePositionY;
@@ -138,8 +144,11 @@ public class Boy : Character
 		
         _holdingObject = false;
         
-        _currentObject.transform.parent = null;
+        var obj = _currentObject.GetComponent<MovableObjects>();
+        obj.Interaction(false);
         
+        _currentObject.transform.parent = null;
+
         var objRb = _currentObject.GetComponent<Rigidbody>();
         objRb.constraints = RigidbodyConstraints.None;
         objRb.AddForce(_powerPoint.forward * 10f, ForceMode.VelocityChange);  //Lanza el objeto hacia donde esta mirando
@@ -152,6 +161,9 @@ public class Boy : Character
     /// </summary>
     private void DropObject()
     {
+        var obj = _currentObject.GetComponent<MovableObjects>();
+        obj.Interaction(false);
+        
         _currentObject.transform.parent = null;
         var objRb = _currentObject.GetComponent<Rigidbody>();
         objRb.constraints = RigidbodyConstraints.None;
@@ -181,8 +193,11 @@ public class Boy : Character
             if (_fieldOfView.visibleTargets.Count == 1)
                 _targetObjectIndex = 0;
 
-            var targetObject = _fieldOfView.visibleTargets[_targetObjectIndex].GetComponent<MovableObjects>();
-            ObjectInPlayerFOV(_objectsInFov, targetObject);
+            if (_fieldOfView.visibleTargets.Count > _targetObjectIndex)
+            {
+                var targetObject = _fieldOfView.visibleTargets[_targetObjectIndex].GetComponent<MovableObjects>();
+                ObjectInPlayerFOV(_objectsInFov, targetObject);
+            }
         }
     }
     

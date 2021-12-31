@@ -9,6 +9,8 @@ public class MovableObjects : MonoBehaviour
     [SerializeField] private GameObject _interactionIcon;
 
     private Color _originalColor;
+
+    private bool _interacting;
     private void Start()
     {
         trans = GetComponent<Transform>();
@@ -18,6 +20,8 @@ public class MovableObjects : MonoBehaviour
     {
         if (trans.localEulerAngles != Vector3.zero)
             trans.localEulerAngles = Vector3.zero;
+        
+        if (_interacting) trans.localPosition = Vector3.zero;
     }
 
     public void Selected()
@@ -30,5 +34,10 @@ public class MovableObjects : MonoBehaviour
     {
         GetComponent<MeshRenderer>().material.color = _originalColor;
         _interactionIcon.SetActive(false);
+    }
+
+    public void Interaction(bool state)
+    {
+        _interacting = state;
     }
 }

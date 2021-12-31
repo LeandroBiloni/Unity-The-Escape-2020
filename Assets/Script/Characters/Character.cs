@@ -7,9 +7,9 @@ public class Character : MonoBehaviour
 {
     [SerializeField] protected float _moveSpeed;
     [SerializeField] protected float _rotationSpeed;
-    [SerializeField] protected bool _canMove;
+    protected bool _canMove;
     
-    [SerializeField] protected bool _selected;
+    protected bool _selected;
 
     protected Animator _animator;
 
@@ -25,6 +25,7 @@ public class Character : MonoBehaviour
         _selectionIcon.SetActive(false);
         _animator = GetComponent<Animator>();
         _canMove = true;
+        _selectionIcon.SetActive(false);
     }
 
     // Update is called once per frame
@@ -58,9 +59,11 @@ public class Character : MonoBehaviour
             _animator.SetFloat("VelX", dir.x);  
         }
         
-        transform.LookAt(transform.position + dir);
-        transform.position += dir.normalized * (_moveSpeed * Time.deltaTime);
-        
+        //transform.LookAt(transform.position + dir);
+        //transform.position += dir.normalized * (_moveSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.LookRotation(dir);
+        transform.position = Vector3.Lerp(transform.position, transform.position + dir, Time.deltaTime * _moveSpeed);
+
         //TODO: Agregar sonido.
         //audMan.WalkingSound(dir);
     }

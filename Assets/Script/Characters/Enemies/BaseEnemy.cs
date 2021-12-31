@@ -2,13 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BaseEnemy : Character
 {
     private Color _originalColor;
+
+    protected NavMeshAgent _navMeshAgent;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
         _originalColor = GetComponent<MeshRenderer>().material.color;
     }
 

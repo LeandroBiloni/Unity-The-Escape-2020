@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
         var selector = FindObjectOfType<CharacterSelector>();
         selector.OnBoySelect += BoyIconOn;
         selector.OnGirlSelect += GirlIconOn;
+        var girl = FindObjectOfType<Girl>();
+        girl.OnTimerRunning += UpdateControlTimeBar;
     }
     
     public void GirlIconOn()
@@ -38,5 +40,10 @@ public class UIManager : MonoBehaviour
         _girlOnIcon.SetActive(false);
         
         _girlPowerBar.transform.parent.gameObject.SetActive(false);
+    }
+
+    public void UpdateControlTimeBar(float value)
+    {
+        _girlPowerBar.fillAmount = value;
     }
 }
