@@ -1,0 +1,9 @@
+Para que el enemigo pueda utilizar waypoints:
+
+*Marcar en el inspector, en "EnemyBrain", la opción "Has Wp".
+
+*En "Waypoints Container", agregar en la opción "Size" la cantidad de waypoints que el enemigo va a tener.
+
+*Agregar los Game Objects que van a ser los waypoints (necesitan tener layer "Waypoint" y un Trigger).
+
+*En "EnemyBody" marcar la opción "Collide with WP".

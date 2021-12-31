@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
 
 		audioManager = FindObjectOfType<AudioManager>();
 		audioManager.PlayMusic(music);
-		cam.characterToFollow = boyObject.transform;
+		cam.SetTarget(boyObject);
 		_enemiesContainer = GameObject.Find("Enemies Container");
 		if (_enemiesContainer != null)
 		{
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
 
 		if (controllingEnemy == false && isChanged)
 		{
-			cam.characterToFollow = girlObject.transform;
+			cam.SetTarget(girlObject);
 		}
 		if (checkpointsReached)
 		{
@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour
 					girl.controllingEnemy = true;
 					enemyToControl.controlled = true;
 					StartCoroutine(ArrowToSelectedCharacter(enemyToControl.gameObject));
-					cam.characterToFollow = enemyToControl.gameObject.transform;
+					cam.SetTarget(enemyToControl.gameObject);
 					scientificToControl.body.anim.SetBool("Dizzy", true);
 					enemyToControl.particle.SetActive(true);
 					break;
@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
 					scientificToControl.controlled = true;
 					print("CIENTIFICO: " + scientificToControl.name + "seleccionado");
 					StartCoroutine(ArrowToSelectedCharacter(scientificToControl.gameObject));
-					cam.characterToFollow = enemyPos;
+					cam.SetTarget(enemyPos.gameObject);
 					scientificToControl.body.anim.SetBool("Dizzy", true);
 					scientificToControl.particle.SetActive(true);
 					scientificToControl.eCommand.SetActive(false);
@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour
 			powerIcon.SetActive(false);
 			StopCoroutine("ArrowToSelectedCharacter");
 			StartCoroutine(ArrowToSelectedCharacter(boyObject));
-			cam.characterToFollow = boyObject.transform;
+			cam.SetTarget(boyObject);
 		}
 		else if (isChanged == false && controllingEnemy == false)
 		{
@@ -272,7 +272,7 @@ public class GameManager : MonoBehaviour
 			powerIcon.SetActive(true);
 			StopCoroutine("ArrowToSelectedCharacter");
 			StartCoroutine(ArrowToSelectedCharacter(girlObject));
-			cam.characterToFollow = girlObject.transform;
+			cam.SetTarget(girlObject);
 		}
 
 	}

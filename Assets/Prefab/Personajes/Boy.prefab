@@ -1386,6 +1386,7 @@ MonoBehaviour:
   _currentObjectRB: {fileID: 0}
   throwBoxSound: {fileID: 8300000, guid: 7608cca404f3a02419835edabe3fdcf9, type: 3}
   pullBoxSound: {fileID: 8300000, guid: b227296f077554844acfe07b84c42103, type: 3}
+  _enemyHit: 0
   _targetIndex: 0
   horizontal: 0
   vertical: 0
@@ -1395,8 +1396,7 @@ MonoBehaviour:
   objectsInFov: 0
   holding: 0
   canMove: 0
-  changeIcon: {fileID: 0}
-  dropIcon: {fileID: 0}
+  _checkManager: {fileID: 0}
 --- !u!1 &2783815455429362119
 GameObject:
   m_ObjectHideFlags: 0
