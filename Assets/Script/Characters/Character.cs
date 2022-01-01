@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
     [SerializeField] protected float _moveSpeed;
-    [SerializeField] protected float _rotationSpeed;
     protected bool _canMove;
     
     protected bool _selected;
@@ -18,6 +15,8 @@ public class Character : MonoBehaviour
     [SerializeField] protected float _iconShowTime;
     
     protected FieldOfView _fieldOfView;
+
+    protected Rigidbody _rigidbody;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -26,6 +25,7 @@ public class Character : MonoBehaviour
         _animator = GetComponent<Animator>();
         _canMove = true;
         _selectionIcon.SetActive(false);
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -100,5 +100,10 @@ public class Character : MonoBehaviour
         yield return new WaitForSeconds(_iconShowTime);
         
         _selectionIcon.SetActive(false);
+    }
+    
+    public virtual void Dead()
+    {
+        _canMove = false;
     }
 }

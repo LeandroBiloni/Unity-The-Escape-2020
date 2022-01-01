@@ -262,4 +262,10 @@ public class Boy : Character
         
         ObjectInPlayerFOV(_objectsInFov, _fieldOfView.visibleTargets[_targetObjectIndex].GetComponent<MovableObjects>());
     }
+    
+    public override void Dead()
+    {
+        base.Dead();
+        _canUsePower = false;
+    }
 }

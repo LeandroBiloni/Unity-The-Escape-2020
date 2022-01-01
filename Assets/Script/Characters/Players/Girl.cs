@@ -243,4 +243,10 @@ public class Girl : Character
 	    var enemy = _fieldOfView.visibleTargets[_enemyTargetIndex].GetComponent<BaseEnemy>();
 	    EnemyInPlayerFOV(_enemyInFOV, enemy);
     }
+
+    public override void Dead()
+    {
+	    base.Dead();
+	    _canControlEnemy = false;
+    }
 }

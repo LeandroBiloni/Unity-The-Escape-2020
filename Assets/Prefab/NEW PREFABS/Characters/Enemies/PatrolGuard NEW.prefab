@@ -1885,7 +1885,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 10
-  _rotationSpeed: 0
   _selectionIcon: {fileID: 7503079808378851408}
   _iconShowTime: 0.5
   _waypoints:
@@ -1893,7 +1892,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _waypointsIndex: 0
 --- !u!1 &6915985742241124401
 GameObject:
   m_ObjectHideFlags: 0
@@ -2617,12 +2615,12 @@ PrefabInstance:
     - target: {fileID: 3673129995841980237, guid: 27db2beb32d718d49a7e36786df3a820,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5001542
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3673129995841980237, guid: 27db2beb32d718d49a7e36786df3a820,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5001541
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3673129995841980237, guid: 27db2beb32d718d49a7e36786df3a820,
         type: 3}
