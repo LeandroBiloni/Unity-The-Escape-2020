@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Scientific : BaseEnemy
 {
@@ -44,7 +41,7 @@ public class Scientific : BaseEnemy
 
     private void GoToAlarm()
     {
-        StopCoroutine(RotateTowards(Vector3.zero));
+        StopCoroutine(RotateTowards(Vector3.zero, true));
         
         _isRunning = true;
         _navMeshAgent.isStopped = true;
@@ -55,7 +52,7 @@ public class Scientific : BaseEnemy
         
         if (CheckIfNeedToRotate(dir))
         {
-            StartCoroutine(RotateTowards(dir));
+            StartCoroutine(RotateTowards(dir, true));
         }
         else _navMeshAgent.isStopped = false;
     }

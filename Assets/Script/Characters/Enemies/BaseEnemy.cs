@@ -24,7 +24,9 @@ public class BaseEnemy : Character
         _originalColor = GetComponent<MeshRenderer>().material.color;
         
         _forward = true;
-        _navMeshAgent.SetDestination(_waypoints[_waypointsIndex].position);
+        
+        if (_waypoints.Count > 0)
+            _navMeshAgent.SetDestination(_waypoints[_waypointsIndex].position);
     }
 
     protected override void Update()
@@ -105,7 +107,7 @@ public class BaseEnemy : Character
 
         if (CheckIfNeedToRotate(dir))
         {
-            StartCoroutine(RotateTowards(dir));
+            StartCoroutine(RotateTowards(dir, false));
         }
     }
     
@@ -134,8 +136,9 @@ public class BaseEnemy : Character
     /// Rotates smoothly towards direction.
     /// </summary>
     /// <param name="dir">The direction to rotate.</param>
+    /// <param name="ignorePlayer">If false, rotation will be stopped when player is in fov.</param>
     /// <returns></returns>
-    protected IEnumerator RotateTowards(Vector3 dir)
+    protected IEnumerator RotateTowards(Vector3 dir, bool ignorePlayer)
     {
         Quaternion rotTarget = Quaternion.LookRotation(dir);
 
@@ -144,8 +147,8 @@ public class BaseEnemy : Character
         var time = 0f;
         while (angle > 1)
         {
-            if (_playerInFOV) break;
-            
+            if (!ignorePlayer && _playerInFOV) break;
+
             transform.rotation = Quaternion.Slerp(transform.rotation, rotTarget, time);
             time += Time.deltaTime;
             angle = Vector3.Angle(transform.forward, dir);

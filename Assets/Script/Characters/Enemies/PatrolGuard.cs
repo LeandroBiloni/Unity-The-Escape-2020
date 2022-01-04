@@ -35,6 +35,7 @@ public class PatrolGuard : BaseEnemy
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             other.gameObject.GetComponent<Character>().Dead();
+            _navMeshAgent.isStopped = true;
             _animator.SetTrigger("Punch");
             
             //TODO: derrota
