@@ -4,41 +4,36 @@ using UnityEngine;
 
 public class SpikeBallSpawn : MonoBehaviour
 {
-    private float _time;
     public float maxTime;
     public SpikeBall ballPrefab;
-    private bool _spawn;
+    public int stock = 10;
+
+    public ObjectPool<SpikeBall> pool;
+
     // Start is called before the first frame update
     void Start()
     {
-        _spawn = false;
-        SpawnBall();
+        pool = new ObjectPool<SpikeBall>(SpikeBallFactory, SpikeBall.TurnOn, SpikeBall.Turnoff, stock, true);
+        StartCoroutine(SpawnSpikeBall());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Timer();
+    public SpikeBall SpikeBallFactory()
+	{
+        var tempBall = Instantiate(ballPrefab, transform);
+        tempBall.transform.localPosition = Vector3.zero;
+        tempBall.mySpawner = this;
+        return tempBall;
+	}
 
-        if (_spawn)
-            SpawnBall();
-    }
+    public void ReturnBall(SpikeBall spikeBall)
+	{
+        pool.ReturnObject(spikeBall);
+	}
 
-    private void Timer()
-    {
-        _time += Time.deltaTime;
-
-        if (_time >= maxTime)
-        {
-            _spawn = true;
-            _time = 0;
-        }
-    }
-
-    private void SpawnBall()
-    {
-        SpikeBall ball = Instantiate(ballPrefab, transform);
-        ball.transform.localPosition = Vector3.zero;
-        _spawn = false;
-    }
+    IEnumerator SpawnSpikeBall()
+	{
+        yield return new WaitForSeconds(maxTime);
+        pool.GetObject();
+        StartCoroutine(SpawnSpikeBall());
+	}
 }

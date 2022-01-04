@@ -6,6 +6,7 @@ public class SpikeBall : MonoBehaviour
 {
     public float speed;
     public ScenesManager scenes;
+    [HideInInspector] public SpikeBallSpawn mySpawner;
     private void Start()
     {
         scenes = FindObjectOfType<ScenesManager>();
@@ -19,9 +20,20 @@ public class SpikeBall : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Destroy balls"))
-            Destroy(gameObject);
+            mySpawner.ReturnBall(this);
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             scenes.LoseScreen();
+    }
+
+    public static void TurnOn(SpikeBall spikeBall)
+	{
+        spikeBall.gameObject.SetActive(true);
+	}
+
+    public static void Turnoff(SpikeBall spikeBall)
+	{
+        spikeBall.gameObject.SetActive(false);
+
     }
 }
