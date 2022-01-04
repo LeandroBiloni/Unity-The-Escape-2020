@@ -1,42 +1,44 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class Door : MonoBehaviour
 {
-    public bool onlyOpen;
-    public bool cameraDoor;
-    private bool _stop;
-    public float speed;
-    public float _time;
-    public float maxTime;
-    public bool canClose = false;
-    private bool _alreadyMoved = false;
-    public Button buttonA;
-    public bool aStepped;
-    public bool bStepped;
-    public Button buttonB;
-    public bool openThroughComputer = false;
-    public Light doorLight;
-    public List<Switches> switches = new List<Switches>();
-    public bool openThroughSwitches;
-    public float activeSwitches;
+    [SerializeField] private float _speed;
+    [SerializeField] private float _maxMoveTime;
+    [SerializeField] private bool _onlyOpen;
+    private bool _isOpen;
+
+    [SerializeField] private List<Button> _buttons;
+    [SerializeField] private List<Switches> _switches = new List<Switches>();
+    
+    [SerializeField] private Light _doorLight;
+    [SerializeField] private Color _inactiveColor;
+    [SerializeField] private Color _activeColor;
     public AudioManager audioManager;
     public AudioClip slideDoor;
     public AudioClip disconectDoor;
-    public bool activated;
-    public Transform cableContainer;
-    public List<Cable> cables = new List<Cable>();
-    public Color cablesDefaultColor;
-    private bool _cablesOn;
-
+    private Cable[] _cables;
 
     private void Start()
     {
         audioManager = FindObjectOfType<AudioManager>();
-        activated = false;
 
+        var childs = transform.GetComponentsInChildren<Cable>();
+        
+        _cables = childs;
+
+        foreach (var sw in _switches)
+        {
+            sw.OnActivation += CheckSwitches;
+        }
+
+        foreach (var button in _buttons)
+        {
+            button.OnActivation += CheckButtons;
+        }
         //myCables = new Transform[cableContainer.childCount];
         //for (int i = 0; i < myCables.Length; i++)
         //{
@@ -48,163 +50,192 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
-        if (onlyOpen)
+        // if (_onlyOpen)
+        // {
+        //     // if (openThroughComputer)
+        //     // {
+        //     //     OpenDoor();
+        //     //     if (_doorLight != null)
+        //     //         _doorLight.color = Color.green;
+        //     //     for (int i = 0; i < cables.Count; i++)
+        //     //     {
+        //     //         cables[i].activated = true;
+        //     //     }
+        //     //
+        //     // }
+        //     //
+        //     // if (openThroughSwitches)
+        //     // {
+        //     //     if (activeSwitches == _switches.Count)
+        //     //     {
+        //     //         OpenDoor();
+        //     //     if (_doorLight != null)
+        //     //         _doorLight.color = Color.green;
+        //     //     }
+        //     // }
+        //
+        // }
+
+        // if (cameraDoor)
+        // {
+        //     if (aStepped && bStepped && _stop == false)
+        //     {
+        //         OpenDoor();
+        //         if (_doorLight != null)
+        //             _doorLight.color = Color.green;
+        //         
+        //     }
+        //     else if (canClose)
+        //     {
+        //         CloseDoor();
+        //         if (_doorLight != null)
+        //             _doorLight.color = Color.red;
+        //     }
+        // }
+
+
+        // if (buttonA != null && buttonB != null)
+        // {
+        //
+        //     // if (buttonA._active == true)
+        //     //     aStepped = true;
+        //     // else aStepped = false;
+        //     //
+        //     // if (buttonB._active == true)
+        //     //     bStepped = true;
+        //     // else bStepped = false;
+        //
+        //     if (aStepped && bStepped)
+        //     {
+        //         if (_doorLight != null)
+        //             _doorLight.color = Color.green;
+        //         //canClose = false;
+        //         OpenDoor();
+        //         // if (_alreadyMoved == false)
+        //         //     _alreadyMoved = true;
+        //         if (activated == false)
+        //         {
+        //             print("funcion de sonido");
+        //             OpenSound();
+        //         }
+        //
+        //     }
+        //     // else if ((!aStepped || !bStepped) && canClose == false && _alreadyMoved)
+        //     //     canClose = true;
+        //
+        //     // if (canClose && _alreadyMoved)
+        //     // {
+        //     //     CloseDoor();
+        //     //
+        //     // }
+        // }
+        //
+        // if (aStepped == true && bStepped == true)
+        // {
+        //     activated = true;
+        // }
+        //
+        // if (aStepped == true && bStepped == false || aStepped ==false && aStepped == true || aStepped == false && bStepped == false)
+        // {
+        //     activated = false;
+        // }
+    }
+
+    public void OpenDoor(Action action = null)
+    {
+        StartCoroutine(MoveDoor(action));
+        CablesOn();
+        _doorLight.color = _activeColor;
+        audioManager.PlaySFX(slideDoor, 1f);
+    }
+
+    IEnumerator MoveDoor(Action action = null)
+    {
+        
+        var time = 0f;
+
+        while (time <= _maxMoveTime)
         {
-            if (openThroughComputer)
+            if (!_isOpen)
             {
-                Open();
-                if (doorLight != null)
-                    doorLight.color = Color.green;
-                for (int i = 0; i < cables.Count; i++)
-                {
-                    cables[i].activated = true;
-                }
-
+                transform.position -= transform.up * (_speed * Time.deltaTime);
             }
-
-            if (openThroughSwitches)
+            else
             {
-                if (activeSwitches == switches.Count)
-                {
-                    Open();
-                if (doorLight != null)
-                    doorLight.color = Color.green;
-                }
-            }
-
-        }
-
-        if (cameraDoor)
-        {
-            if (aStepped && bStepped && _stop == false)
-            {
-                Open();
-                if (doorLight != null)
-                    doorLight.color = Color.green;
+                if (_onlyOpen) yield break;
+                transform.position += transform.up * (_speed * Time.deltaTime);
                 
             }
-            else if (canClose)
-            {
-                Close();
-                if (doorLight != null)
-                    doorLight.color = Color.red;
-            }
+            time += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
         }
 
-
-        if (buttonA != null && buttonB != null)
-        {
-
-            if (buttonA.stepped == true)
-                aStepped = true;
-            else aStepped = false;
-
-            if (buttonB.stepped == true)
-                bStepped = true;
-            else bStepped = false;
-
-            if (aStepped && bStepped)
-            {
-                if (doorLight != null)
-                    doorLight.color = Color.green;
-                canClose = false;
-                Open();
-                if (_alreadyMoved == false)
-                    _alreadyMoved = true;
-                if (activated == false)
-                {
-                    print("funcion de sonido");
-                    OpenSound();
-                }
-
-            }
-            else if ((!aStepped || !bStepped) && canClose == false && _alreadyMoved)
-                canClose = true;
-
-            if (canClose && _alreadyMoved)
-            {
-                Close();
-
-            }
-        }
-
-        if (aStepped == true && bStepped == true)
-        {
-            activated = true;
-        }
-
-        if (aStepped == true && bStepped == false || aStepped ==false && aStepped == true || aStepped == false && bStepped == false)
-        {
-            activated = false;
-        }
+        _isOpen = !_isOpen;
+        
+        action?.Invoke();
     }
 
-    public void Open()
+    public void CloseDoor()
     {
-        transform.position -= transform.up * speed * Time.deltaTime;
-        _time += Time.deltaTime;
-
-        if (_time >= maxTime)
-        {
-            _stop = true;
-            if (!cameraDoor)
-                canClose = true;
-            if (openThroughComputer || openThroughSwitches)
-                gameObject.SetActive(false);
-        }
-        if (_cablesOn == false)
-        {
-            CablesOn();
-            _cablesOn = true;
-        }
+        StartCoroutine(MoveDoor());
+        CablesOff();
+        _doorLight.color = _inactiveColor;
     }
-
-
-    public void OpenSound()
-    {   
-        audioManager.PlaySFX(slideDoor, 1f);
-        print("reproduzco el sonido");
-        activated = true;
-    }
-
-    private void Close()
-    {
-        transform.position += transform.up * speed * Time.deltaTime;
-        _time -= Time.deltaTime;
-
-        if (_time <= 0)
-        {
-            canClose = false;
-            _stop = false;
-            _alreadyMoved = false;
-            if (doorLight != null)
-                doorLight.color = Color.red;
-        }
-
-        if (_cablesOn && cables.Count != 0)
-        {
-            CablesOff();
-            _cablesOn = false;
-        }
-    }
+    
+    
 
     private void CablesOn()
     {
-        foreach (var cable in cables)
+        foreach (var cable in _cables)
         {
-            var render = cable.gameObject.GetComponent<Renderer>();
-            Material[] materials = render.materials;
-            materials[0].color = Color.green;
+            // var render = cable.gameObject.GetComponent<Renderer>();
+            // Material[] materials = render.materials;
+            // materials[0].color = Color.green;
+            cable.Activate();
         }
     }
 
     private void CablesOff()
     {
-        foreach (var cable in cables)
+        foreach (var cable in _cables)
         {
-            var render = cable.gameObject.GetComponent<Renderer>();
-            Material[] materials = render.materials;
-            materials[0].color = cablesDefaultColor;
+            // var render = cable.gameObject.GetComponent<Renderer>();
+            // Material[] materials = render.materials;
+            // materials[0].color = cablesDefaultColor;
+            cable.Deactivate();
         }
+    }
+
+    public void CheckButtons()
+    {
+        var count = 0;
+        foreach (var button in _buttons)
+        {
+            if (!button.IsActive()) return;
+
+            count++;
+            
+            if (count == _buttons.Count)
+                OpenDoor();
+        }
+    }
+
+    public void CheckSwitches()
+    {
+        var count = 0;
+        foreach (var sw in _switches)
+        {
+            if (!sw.IsActive()) return;
+
+            count++;
+            
+            if (count == _switches.Count)
+                OpenDoor();
+        }
+    }
+
+    public bool IsOpen()
+    {
+        return _isOpen;
     }
 }

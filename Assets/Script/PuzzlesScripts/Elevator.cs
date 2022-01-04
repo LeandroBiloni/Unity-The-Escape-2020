@@ -4,36 +4,45 @@ using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
-    public float speed;
-    public Button buttonA;
-    public bool aStepped;
-    public bool bStepped;
-    public Button buttonB;
-    private bool _canMove;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float _speed;
+    [SerializeField] private List<Button> _buttons = new List<Button>();
 
     // Update is called once per frame
     void Update()
     {
-        if (buttonA.stepped == true)
-            aStepped = true;
-        else aStepped = false;
-
-        if (buttonB.stepped == true)
-            bStepped = true;
-        else bStepped = false;
-
-        if (aStepped && bStepped)
-            Move();
+        // if (buttonA._active == true)
+        //     aStepped = true;
+        // else aStepped = false;
+        //
+        // if (buttonB._active == true)
+        //     bStepped = true;
+        // else bStepped = false;
+        //
+        // if (aStepped && bStepped)
+        //     Move();
 
     }
 
-    private void Move()
+    IEnumerator Move()
     {
-        transform.position += transform.up * speed * Time.deltaTime;
+        while (true)
+        {
+            transform.position += transform.up * (_speed * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+    
+    public void CheckButtons()
+    {
+        var count = 0;
+        foreach (var button in _buttons)
+        {
+            if (!button.IsActive()) return;
+
+            count++;
+            
+            if (count == _buttons.Count)
+                StartCoroutine(Move());
+        }
     }
 }

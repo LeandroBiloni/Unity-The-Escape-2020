@@ -5,162 +5,152 @@ using UnityEngine;
 public class Switches : MonoBehaviour
 {
 	[Header("Switches")]
-	public Switches previusSwitch;
-	public Switches nextSwitch;
-	public bool activated;
+	[SerializeField] private Switches _previousSwitch;
+	[SerializeField] private Switches _nextSwitch;
+	private bool _active;
 	public GameObject parentOfSwitches;
 	[Header("Doors")]
-	public List<Door> doorsList = new List<Door>();
-	public Door doorToOpen;
+	[SerializeField] private List<Door> _doorsList = new List<Door>();
 	public AudioClip stepSound;
 	[Header("Timer")]
 	public float maxTimeToUseAgain;
 	[Header("Cables")]
 	public Transform cableContainer;
-	//public Transform[] myCables;
-	public List<Cable> cables = new List<Cable>();
 	private float _time;
 	private bool _canActivate;
 	public Color cablesDefaultColor;
+	private Cable[] _cables;
+	private MeshRenderer _meshRenderer;
 
+	public delegate void Activation();
+
+	public event Activation OnActivation;
+	
 	private void Start()
 	{
-		/*myCables = new Transform[cableContainer.childCount];
-		for (int i = 0; i < myCables.Length; i++)
-		{
-			myCables[i] = cableContainer.GetChild(i);
-			var myCable = myCables[i].gameObject.GetComponent<Cable>();
-			cables.Add(myCable);
-		}*/
+		var childs = transform.GetComponentsInChildren<Cable>();
+        
+		_cables = childs;
+
+		_meshRenderer = GetComponent<MeshRenderer>();
 	}
 	private void Update()
 	{
-		if (activated)
-		{
-			MeshRenderer mesh = GetComponent<MeshRenderer>();
-			mesh.material.color = Color.green;
-			if (cables.Count != 0)
-				CablesOn();
-		}
-		else
-		{
-			MeshRenderer mesh = GetComponent<MeshRenderer>();
-			mesh.material.color = Color.red;
-			if (cables.Count != 0)
-				CablesOff();
-		}
+		// if (_active)
+		// {
+		// 	MeshRenderer mesh = GetComponent<MeshRenderer>();
+		// 	mesh.material.color = Color.green;
+		// 	if (cables.Count != 0)
+		// 		CablesOn();
+		// }
+		// else
+		// {
+		// 	MeshRenderer mesh = GetComponent<MeshRenderer>();
+		// 	mesh.material.color = Color.red;
+		// 	if (cables.Count != 0)
+		// 		CablesOff();
+		// }
+		//
+		// if (_canActivate == false)
+		// 	ActivationTimer();
+	}
+
+	void ActivateSwitch()
+	{
+		_active = true;
 		
-		if (_canActivate == false)
-			ActivationTimer();
+		OnActivation?.Invoke();
+		UpdateAdjacentSwitches();
 	}
 
-	void Activation()
+	void DeactivateSwitch()
 	{
-		activated = true;
-		if (doorToOpen != null)
-			doorToOpen.activeSwitches++;
-		Adjacent();
+		_active = false;
+		UpdateAdjacentSwitches();
 	}
 
-	void Deactivate()
+	void UpdateAdjacentSwitches()
 	{
-		activated = false;
-		if (doorToOpen != null)
-			doorToOpen.activeSwitches--;
-		Adjacent();
-	}
+		_previousSwitch.UpdateState();
 
-	void Adjacent()
-	{
-		bool checkPreviusState = previusSwitch.activated;
-		checkPreviusState = !checkPreviusState;
-		previusSwitch.activated = checkPreviusState;
-
-		bool checkNextState = nextSwitch.activated;
-		checkNextState = !checkNextState;
-		nextSwitch.activated = checkNextState;
+		_nextSwitch.UpdateState();
 	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
 		if(collision.gameObject.layer == LayerMask.NameToLayer("Player") && _canActivate)
 		{
-			print("nooooooooooooooooooooo");
-			if (!activated)
-				Activation();
-			else
-				Deactivate();
-			if (doorsList.Count > 0)
-			{
-				doorsList[0].audioManager.PlaySFX(stepSound, 1.5f);
-
-			}
-			else
-			{
-				doorToOpen.audioManager.PlaySFX(stepSound, 1.5f);
-			}
-
-			CheckSwitches();
-		}
-
-		_canActivate = false;
-	}
-
-	void CheckSwitches()
-	{
-		List<Switches> allSwitches = new List<Switches>();
-		for (int i = 0; i < parentOfSwitches.transform.childCount; i++)
-		{
-			allSwitches.Add(parentOfSwitches.transform.GetChild(i).GetComponent<Switches>());
-		}
-		//allSwitches.AddRange(FindObjectsOfType<Switches>());
-
-		List<Switches> activatedSwitches = new List<Switches>();
-
-		for (int i = 0; i < allSwitches.Count; i++)
-		{
-			if (allSwitches[i].activated)
-			{
-				activatedSwitches.Add(allSwitches[i]);
-			}
-			else
-			{
-				activatedSwitches.Remove(allSwitches[i]);
-			}
-		}
-
-		if(activatedSwitches.Count == allSwitches.Count)
-		{
-			for (int i = 0; i < cables.Count; i++)
-			{
-				cables[i].activated = true;
-			}
-
-			for (int i = 0; i < doorsList.Count; i++)
-			{
-				doorToOpen = doorsList[i];
-				doorToOpen.audioManager.PlaySFX(doorToOpen.disconectDoor);
-				doorToOpen.openThroughComputer = true;
-			}
+			if (!_active)
+				ActivateSwitch();
+			else DeactivateSwitch();
+			
+			// if (_doorsList.Count > 0)
+			// {
+			// 	_doorsList[0].audioManager.PlaySFX(stepSound, 1.5f);
+			//
+			// }
+			// else
+			// {
+			// 	doorToOpen.audioManager.PlaySFX(stepSound, 1.5f);
+			// }
 		}
 	}
 
-	private void ActivationTimer()
-	{
-		_time += Time.deltaTime;
+	// void CheckSwitches()
+	// {
+	// 	List<Switches> allSwitches = new List<Switches>();
+	// 	for (int i = 0; i < parentOfSwitches.transform.childCount; i++)
+	// 	{
+	// 		allSwitches.Add(parentOfSwitches.transform.GetChild(i).GetComponent<Switches>());
+	// 	}
+	// 	//allSwitches.AddRange(FindObjectsOfType<Switches>());
+	//
+	// 	List<Switches> activatedSwitches = new List<Switches>();
+	//
+	// 	for (int i = 0; i < allSwitches.Count; i++)
+	// 	{
+	// 		if (allSwitches[i]._active)
+	// 		{
+	// 			activatedSwitches.Add(allSwitches[i]);
+	// 		}
+	// 		else
+	// 		{
+	// 			activatedSwitches.Remove(allSwitches[i]);
+	// 		}
+	// 	}
+	//
+	// 	if(activatedSwitches.Count == allSwitches.Count)
+	// 	{
+	// 		for (int i = 0; i < cables.Count; i++)
+	// 		{
+	// 			cables[i].activated = true;
+	// 		}
+	//
+	// 		for (int i = 0; i < _doorsList.Count; i++)
+	// 		{
+	// 			doorToOpen = _doorsList[i];
+	// 			doorToOpen.audioManager.PlaySFX(doorToOpen.disconectDoor);
+	// 			doorToOpen.openThroughComputer = true;
+	// 		}
+	// 	}
+	// }
 
-		if (_time >= maxTimeToUseAgain)
-		{
-			_canActivate = true;
-			_time = 0;
-		}
-
-	}
+	// private void ActivationTimer()
+	// {
+	// 	_time += Time.deltaTime;
+	//
+	// 	if (_time >= maxTimeToUseAgain)
+	// 	{
+	// 		_canActivate = true;
+	// 		_time = 0;
+	// 	}
+	//
+	// }
 
 
 	private void CablesOn()
 	{
-		foreach (var cable in cables)
+		foreach (var cable in _cables)
 		{
 			var render = cable.gameObject.GetComponent<Renderer>();
 			Material[] materials = render.materials;
@@ -170,11 +160,23 @@ public class Switches : MonoBehaviour
 
 	private void CablesOff()
 	{
-		foreach (var cable in cables)
+		foreach (var cable in _cables)
 		{
 			var render = cable.gameObject.GetComponent<Renderer>();
 			Material[] materials = render.materials;
 			materials[0].color = cablesDefaultColor;
 		}
+	}
+
+	public bool IsActive()
+	{
+		return _active;
+	}
+
+	private void UpdateState()
+	{
+		_active = !_active;
+		
+		if (_active) OnActivation?.Invoke();
 	}
 }

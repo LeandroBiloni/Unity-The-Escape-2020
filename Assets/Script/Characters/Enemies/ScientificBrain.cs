@@ -191,7 +191,7 @@ public class ScientificBrain : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Alarm") && !_alarmReached && !canUseAlarms) 
         {
             _alarm = other.GetComponent<Alarm>();
-            _alarm.playerPos = playerPos;
+            //_alarm.playerPos = playerPos;
             body.moveToAlarm = false;
             _alarmReached = true;
         }

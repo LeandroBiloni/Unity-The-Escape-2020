@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class Alarm : MonoBehaviour
 {
-    private GameManager _manager;
-    public Vector3 playerPos;
-    public Door door;
-    // Start is called before the first frame update
-    void Start()
-    {
-       _manager = FindObjectOfType<GameManager>();
-    }
+    [SerializeField] private Transform _spawnPoint;
 
-    private void OnTriggerEnter(Collider other)
+    [SerializeField] private Door _door;
+    
+    public delegate void AlarmActivation(Vector3 playerPos, Vector3 spawnPoint, Door door);
+
+    public event AlarmActivation OnAlarmActivation;
+    
+    public void TriggerAlarm(Vector3 playerPos)
     {
-        if (other.CompareTag("Scientific")) 
-        {
-            ScientificBrain sci = other.GetComponent<ScientificBrain>();
-            playerPos = sci.playerPos;
-            _manager.ActivateAlarm(playerPos, false, null, door, "");             
-        }
+        if (_door)
+            _door.OpenDoor();
+
+        OnAlarmActivation?.Invoke(playerPos, _spawnPoint.position, _door);
+        
     }
 }

@@ -4,108 +4,65 @@ using UnityEngine;
 
 public class ComputerDoor : MonoBehaviour
 {
-    public Door door;
-    public Platform platform;
-    public GameObject command;
-	public Transform cableContainer;
-	public Transform[] myCables;
-    public List<Cable> cables = new List<Cable>();
-    public Color cablesDefaultColor;
+    [SerializeField] private Door _door;
+    [SerializeField] private Platform _platform;
+    [SerializeField] private GameObject _activationKeyIcon;
+    [SerializeField] private KeyCode _interactionKey;
+    public Cable[] _cables;
 
     private void Start()
 	{
-		myCables = new Transform[cableContainer.childCount];
-		for (int i = 0; i < myCables.Length; i++)
-		{
-			myCables[i] = cableContainer.GetChild(i);
-			var myCable = myCables[i].gameObject.GetComponent<Cable>();
-			cables.Add(myCable);
-		}
+        var childs = transform.GetComponentsInChildren<Cable>();
+        
+        _cables = childs;
 	}
-	/*private void OnCollisionEnter(Collision collision)
+    
+    private void OnTriggerStay(Collider other)
     {
-        if (collision.gameObject.tag == "Scientific" && door != null)
-		{
-            command.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-            door.openThroughComputer = true;
-			door.audioManager.PlaySFX(door.slideDoor, 1.7f);
-            }
-		}
+        var scientific = other.gameObject.GetComponent<Scientific>();
 
-        if (collision.gameObject.tag == "Scientific" && platform != null)
-            platform.move = true;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Scientific" && door != null)
+        if (scientific)
         {
-            command.SetActive(false);
-        }
-    }*/
-	private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("Scientific") && door != null)
-        {
-            ScientificBrain sci = other.GetComponent<ScientificBrain>();
-            if (sci.controlled)
+            if (Input.GetKeyDown(_interactionKey))
             {
-                command.SetActive(true);
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-					
-					door.openThroughComputer = true;
-					door.audioManager.PlaySFX(door.slideDoor, 1.7f);                  
-                    for (int i = 0; i < cables.Count; i++)
-					{
-						cables[i].activated = true;
-					}
-                }
-            }
-        }
-
-        if (other.gameObject.CompareTag("Scientific") && platform != null)
-        {
-            ScientificBrain sci = other.GetComponent<ScientificBrain>();
-            if (sci.controlled)
-            {
-                command.SetActive(true);
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-
-                    platform.move = true;
-                }
+                Activate();
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Scientific"))
+        _activationKeyIcon.SetActive(false);
+    }
+
+    private void Activate()
+    {
+        if (_door && !_door.IsOpen())
         {
-            command.SetActive(false);
+            _door.OpenDoor();
         }
+
+        if (_platform && _platform.IsInteractable())
+        {
+            _platform.StartMovement();
+        } 
+        
+        CablesOn();
     }
 
     private void CablesOn()
     {
-        foreach (var cable in cables)
+        foreach (var cable in _cables)
         {
-            var render = cable.gameObject.GetComponent<Renderer>();
-            Material[] materials = render.materials;
-            materials[0].color = Color.green;
+            cable.Activate();
         }
     }
 
     private void CablesOff()
     {
-        foreach (var cable in cables)
+        foreach (var cable in _cables)
         {
-            var render = cable.gameObject.GetComponent<Renderer>();
-            Material[] materials = render.materials;
-            materials[0].color = cablesDefaultColor;
+            cable.Deactivate();
         }
     }
 }     

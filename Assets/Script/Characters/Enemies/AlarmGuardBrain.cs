@@ -120,11 +120,11 @@ public class AlarmGuardBrain : MonoBehaviour
             moveToPos = false;
 			anim.SetBool("Chasing", false);
 			anim.SetFloat("VelZ", 0);
-			if (posToMove == spawnPoint)
-            {
-                _manager.CloseDoors();
-                Destroy(gameObject);
-            }
+			// if (posToMove == spawnPoint)
+   //          {
+   //              _manager.CloseDoors();
+   //              Destroy(gameObject);
+   //          }
         }
     }
 

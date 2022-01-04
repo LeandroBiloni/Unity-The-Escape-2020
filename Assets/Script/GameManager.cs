@@ -140,11 +140,11 @@ public class GameManager : MonoBehaviour
 		if (_canCheckKeys)
 			CheckKeys();
 
-		if (_lightsOn)
-		{
-			LightsTimer();
-			LightsFlicker();
-		}
+		// if (_lightsOn)
+		// {
+		// 	LightsTimer();
+		// 	LightsFlicker();
+		// }
 
 		if (controllingEnemy == false && isChanged)
 		{
@@ -489,61 +489,60 @@ public class GameManager : MonoBehaviour
 		return _closestAlarm.transform.position;
 	}
 
-	public void ActivateAlarm(Vector3 playerPos, bool camera, GuardSpawn spawnToUse, Door door, string playerTag)
-	{
-		if (alarmOn == false)
-		{
-			if (lightsContainer != null)
-				lightsContainer.SetActive(true);
-			alarmOn = true;
-			_lightsOn = true;
-			if (door)
-				print("TENGO PUERTAAAA");
-			_doorToUse = door.GetComponent<Door>();
-			_doorToUse.audioManager.PlaySFX(_doorToUse.slideDoor);
-			_doorToUse.aStepped = true;
-			_doorToUse.bStepped = true;
-			if (camera)
-			{
-				print("ACTIVATE ALARM CAMERA TRUE");
-				SpawnCameraGuards(playerPos, spawnToUse, playerTag);
-			}
-			else SpawnAlarmGuards(playerPos, _spawnToActivate);
+	// public void ActivateAlarm(Vector3 playerPos, bool camera, GuardSpawn spawnToUse, Door door, string playerTag)
+	// {
+	// 	if (alarmOn == false)
+	// 	{
+	// 		if (lightsContainer != null)
+	// 			lightsContainer.SetActive(true);
+	// 		alarmOn = true;
+	// 		_lightsOn = true;
+	// 		if (door)
+	// 			print("TENGO PUERTAAAA");
+	// 		_doorToUse = door.GetComponent<Door>();
+	// 		_doorToUse.audioManager.PlaySFX(_doorToUse.slideDoor);
+	// 		_doorToUse.aStepped = true;
+	// 		_doorToUse.bStepped = true;
+	// 		if (camera)
+	// 		{
+	// 			print("ACTIVATE ALARM CAMERA TRUE");
+	// 			SpawnCameraGuards(playerPos, spawnToUse, playerTag);
+	// 		}
+	// 		else SpawnAlarmGuards(playerPos, _spawnToActivate);
+	//
+	// 		audioManager.PlaySFX(alarmSound, 0.25f);
+	// 	}
+	// }
 
-			audioManager.PlaySFX(alarmSound, 0.25f);
-		}
-		
-	}
-
-	private void LightsFlicker()
-	{
-		if (lightsContainer != null)
-			foreach (Transform light in lightsContainer.transform)
-			{
-				_light = light.gameObject;
-				_alarmLight = _light.GetComponent<Light>();
-
-				if (_alarmLight.intensity >= maxLightIntensity)
-					_sum = false;
-				else if (_alarmLight.intensity <= minLightIntensity)
-					_sum = true;
-				if (_sum)
-					_alarmLight.intensity += Time.deltaTime * lightsSpeed;
-				else _alarmLight.intensity -= Time.deltaTime * lightsSpeed;
-			}
-	}
-
-	private void LightsTimer()
-	{
-		if (_lightTime <= maxLightTime)
-			_lightTime += Time.deltaTime;
-		else
-		{
-			_lightTime = 0;
-			_lightsOn = false;
-			DeactivateAlarm();
-		}
-	}
+	// private void LightsFlicker()
+	// {
+	// 	if (lightsContainer != null)
+	// 		foreach (Transform light in lightsContainer.transform)
+	// 		{
+	// 			_light = light.gameObject;
+	// 			_alarmLight = _light.GetComponent<Light>();
+	//
+	// 			if (_alarmLight.intensity >= maxLightIntensity)
+	// 				_sum = false;
+	// 			else if (_alarmLight.intensity <= minLightIntensity)
+	// 				_sum = true;
+	// 			if (_sum)
+	// 				_alarmLight.intensity += Time.deltaTime * lightsSpeed;
+	// 			else _alarmLight.intensity -= Time.deltaTime * lightsSpeed;
+	// 		}
+	// }
+	//
+	// private void LightsTimer()
+	// {
+	// 	if (_lightTime <= maxLightTime)
+	// 		_lightTime += Time.deltaTime;
+	// 	else
+	// 	{
+	// 		_lightTime = 0;
+	// 		_lightsOn = false;
+	// 		DeactivateAlarm();
+	// 	}
+	// }
 
 	private void DeactivateAlarm()
 	{
@@ -584,14 +583,14 @@ public class GameManager : MonoBehaviour
 			_cameraSpawnBoySide = null;
 	}
 
-	public void CloseDoors()
-	{
-		_doorToUse.aStepped = false;
-		_doorToUse.bStepped = false;
-		_doorToUse.canClose = true;
-		_doorToUse = null;
-		alarmOn = false;
-	}
+	// public void CloseDoors()
+	// {
+	// 	_doorToUse.aStepped = false;
+	// 	_doorToUse.bStepped = false;
+	// 	_doorToUse.canClose = true;
+	// 	_doorToUse = null;
+	// 	alarmOn = false;
+	// }
 
 	private void SpawnAlarmGuards(Vector3 seenPlayerPos, int spawnToUse)
 	{

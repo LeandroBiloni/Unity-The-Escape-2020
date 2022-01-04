@@ -292,8 +292,9 @@ GameObject:
   - component: {fileID: 26425242}
   - component: {fileID: 26425241}
   - component: {fileID: 26425244}
+  - component: {fileID: 26425245}
   m_Layer: 15
-  m_Name: Cylinder
+  m_Name: Alarm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353,7 +354,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26425240}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.36, y: 0.05, z: -18.3}
+  m_LocalPosition: {x: -16.36, y: 0.29, z: -18.3}
   m_LocalScale: {x: 1, y: 0.21068, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -373,6 +374,22 @@ CapsuleCollider:
   m_Height: 1.9999999
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &26425245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26425240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f60095b1fff3b5640bed7150b28aafe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _alarmDuration: 5
+  _guard: {fileID: 1207329500862627917, guid: 68129975fd471b444ad37d1462d3a94b, type: 3}
+  _spawnPoint: {fileID: 26425243}
+  _door: {fileID: 0}
 --- !u!1001 &36815081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12271,51 +12288,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1331069130}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1337098851
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1337098853}
-  - component: {fileID: 1337098852}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1337098852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337098851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c22af33e856d5e54f9a71b3940f23b4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  guard: {fileID: 1207329500862627917, guid: 68129975fd471b444ad37d1462d3a94b, type: 3}
-  spawn: {fileID: 26425243}
---- !u!4 &1337098853
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337098851}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21.056816, y: 4.1223593, z: -30.021042}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 27
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1397930906
 GameObject:
   m_ObjectHideFlags: 0
@@ -18118,7 +18090,7 @@ PrefabInstance:
     - target: {fileID: 849214496564465503, guid: 3c87f1bc9d61bf346b4bf08aab5f2006,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -31.456135
+      value: -28.59
       objectReference: {fileID: 0}
     - target: {fileID: 849214496564465503, guid: 3c87f1bc9d61bf346b4bf08aab5f2006,
         type: 3}
@@ -18189,6 +18161,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Scientific NEW
+      objectReference: {fileID: 0}
+    - target: {fileID: 4436711718940360012, guid: 3c87f1bc9d61bf346b4bf08aab5f2006,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c87f1bc9d61bf346b4bf08aab5f2006, type: 3}
@@ -18571,7 +18548,7 @@ PrefabInstance:
     - target: {fileID: 6513054654732879591, guid: 2d7100b10b460684c9cbbada2f56139f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -27.27
+      value: -33.415
       objectReference: {fileID: 0}
     - target: {fileID: 6513054654732879591, guid: 2d7100b10b460684c9cbbada2f56139f,
         type: 3}
@@ -18780,7 +18757,7 @@ PrefabInstance:
     - target: {fileID: 6744586578821490593, guid: 06491c028c863a241af1b1cfab389042,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -27.57
+      value: -33.393
       objectReference: {fileID: 0}
     - target: {fileID: 6744586578821490593, guid: 06491c028c863a241af1b1cfab389042,
         type: 3}

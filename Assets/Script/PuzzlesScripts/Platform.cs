@@ -4,30 +4,35 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
-    public bool move = false;
+    private bool _move;
+    [SerializeField] private float _moveTime;
     public float speed;
-    public float _time;
-    public float maxTime;
-    public GameObject limits;
-    public bool activated;
+    [SerializeField] private GameObject limits;
+    private bool _interactable;
 
-    // Update is called once per frame
-    void Update()
+    public void StartMovement()
     {
-        if (move == true && activated == false)
-            Move();
+        if (!_interactable) return;
+
+        StartCoroutine(Move());
     }
 
-    public void Move()
+    IEnumerator Move()
     {
-        transform.position += transform.up * speed * Time.deltaTime;
-        _time += Time.deltaTime;
+        var time = 0f;
 
-        if (_time >= maxTime)
+        while (time <= _moveTime)
         {
-            limits.SetActive(false);
-            move = false;
-            activated = true;
+            transform.position += transform.up * (speed * Time.deltaTime);
+            time += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
         }
+        
+        limits.SetActive(false);
+    }
+
+    public bool IsInteractable()
+    {
+        return _interactable;
     }
 }

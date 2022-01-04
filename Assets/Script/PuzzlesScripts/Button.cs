@@ -1,71 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Button : MonoBehaviour
 {
-    public bool stepped = false;
-	public Transform cableContainer;
-	//public Transform[] myCables;
-	public List<Cable> cables = new List<Cable>();
-    public GameObject commandIcon;
-    public BoyBrain boy;
-    public float distanceFromPlayer;
-    public bool playerCanUse;
-    public Color cablesDefaultColor;
+    private bool _active = false;
+    //public Transform[] myCables;
+    private Cable[] _cables;
+    [SerializeField] private GameObject _commandIcon;
+    private Boy _boy;
+    [SerializeField] private float _keyIconActivationDistance;
+    private MeshRenderer _meshRenderer;
 
+    public delegate void Activation();
+
+    public event Activation OnActivation;
     private void Start()
     {
-        boy = FindObjectOfType<BoyBrain>();
-		//myCables = new Transform[cableContainer.childCount];
-		//for (int i = 0; i < myCables.Length; i++)
-		//{
-		//	myCables[i] = cableContainer.GetChild(i);
-		//	var myCable = myCables[i].gameObject.GetComponent<Cable>();
-		//	cables.Add(myCable);
-		//}
-	}
+        _boy = FindObjectOfType<Boy>();
+        _meshRenderer = GetComponent<MeshRenderer>();
+        
+        var childs = transform.GetComponentsInChildren<Cable>();
+        
+        _cables = childs;
+    }
 
     private void Update()
     {
-        if (commandIcon)
-        {
-            if (boy.holding)
-            {
-                if (Vector3.Distance(boy.transform.position, transform.position) <= distanceFromPlayer)
-                {
-                    commandIcon.SetActive(true);
-                }
-            }
-            else commandIcon.SetActive(false);
-        }
+        if (!_meshRenderer.isVisible) return;
 
-		if (stepped)
-		{
-			for (int i = 0; i < cables.Count; i++)
-			{
-				cables[i].activated = true;
-			}
-		}
-		else
-		{
-			for (int i = 0; i < cables.Count; i++)
-			{
-				cables[i].activated = false;
-			}
-		}
+        if (_boy.IsHoldingObject())
+        {
+            if (Vector3.Distance(_boy.transform.position, transform.position) <= _keyIconActivationDistance)
+            {
+                _commandIcon.SetActive(true);
+            }
+        }
+        else _commandIcon.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player") && playerCanUse))
+        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player")))
         {
-            stepped = true;            
+            _active = true;       
+            OnActivation?.Invoke();
             if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
             {
                 other.gameObject.transform.position = transform.position;
-                other.attachedRigidbody.isKinematic = true;
+                //other.attachedRigidbody.isKinematic = true;
             }
             CablesOn();
         }
@@ -73,34 +55,36 @@ public class Button : MonoBehaviour
 
     private void OnTriggerExit(Collider other) 
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player") && playerCanUse))
+        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player")))
         {
-            stepped = false;      
-            if(other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
-            {
-                other.attachedRigidbody.isKinematic = false;
-            }
+            _active = false;      
+            // if(other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
+            // {
+            //     other.attachedRigidbody.isKinematic = false;
+            // }
+            CablesOff();
         }
-        CablesOff();
+        
     }
 
     private void CablesOn()
     {
-        foreach (var cable in cables)
+        foreach (var cable in _cables)
         {
-            var render = cable.gameObject.GetComponent<Renderer>();
-            Material[] materials = render.materials;
-            materials[0].color = Color.green;
+            cable.Activate();
         }
     }
 
     private void CablesOff()
     {
-        foreach (var cable in cables)
+        foreach (var cable in _cables)
         {
-            var render = cable.gameObject.GetComponent<Renderer>();
-            Material[] materials = render.materials;
-            materials[0].color = cablesDefaultColor;
+            cable.Deactivate();
         }
+    }
+
+    public bool IsActive()
+    {
+        return _active;
     }
 }

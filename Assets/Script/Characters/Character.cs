@@ -17,6 +17,8 @@ public class Character : MonoBehaviour
     protected FieldOfView _fieldOfView;
 
     protected Rigidbody _rigidbody;
+
+    protected MeshRenderer _meshRenderer;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -26,11 +28,14 @@ public class Character : MonoBehaviour
         _canMove = true;
         _selectionIcon.SetActive(false);
         _rigidbody = GetComponent<Rigidbody>();
+        _meshRenderer = GetComponent<MeshRenderer>();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
+        if (!_meshRenderer.isVisible) return;
+        
         if (!_selected) return;
 
         if (_canMove)

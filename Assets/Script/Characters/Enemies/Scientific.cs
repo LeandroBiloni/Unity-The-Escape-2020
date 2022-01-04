@@ -6,6 +6,7 @@ public class Scientific : BaseEnemy
     [SerializeField] private bool _isScared;
     private bool _isRunning;
 
+    private Vector3 _playerPos;
     // Update is called once per frame
     protected override void Update()
     {
@@ -47,7 +48,7 @@ public class Scientific : BaseEnemy
         _navMeshAgent.isStopped = true;
         _animator.SetBool("MoveToAlarm", true);
         _navMeshAgent.SetDestination(alarm.position);
-        
+        _playerPos = _fieldOfView.visibleTargets[0].transform.position;
         var dir = (alarm.position - transform.position).normalized;
         
         if (CheckIfNeedToRotate(dir))
@@ -59,13 +60,16 @@ public class Scientific : BaseEnemy
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Alarm"))
+        var alarm = other.gameObject.GetComponent<Alarm>();
+        if (alarm && !_isScared)
         {
+            Debug.Log("alarm");
             _navMeshAgent.isStopped = true;
             _isRunning = false;
             _isScared = true;
             _animator.SetBool("Dizzy", true);
             _animator.SetBool("MoveToAlarm", false);
+            alarm.TriggerAlarm(_playerPos);
         }
     }
 }

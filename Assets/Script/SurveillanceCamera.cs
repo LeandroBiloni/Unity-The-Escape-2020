@@ -5,30 +5,32 @@ using UnityEngine;
 
 public class SurveillanceCamera : MonoBehaviour
 {
-	public float rotate_amount;
-	public bool targetInFov;
+	[SerializeField] private Transform _spawnPoint;
 
-	int _targetIndex = 0;
-	bool _gotTargetPosicion;
-	bool _callSecurity = true;
-	bool _following;
-	bool _moving;
-	public GameManager _manager;
-	public GuardSpawn spawn;
-	public Door door;
-	FieldOfView _fov;
+	[SerializeField] private Door _door;
+	
+	[SerializeField] private float _rotateAmount;
+	private bool _targetInFov;
+
+	private int _targetIndex = 0;
+	private bool _moving;
+	private FieldOfView _fieldOfView;
 	Transform _target;
 
-	Vector3 startPosition;
-	Quaternion startRotation;
+	Vector3 _startPosition;
+	Quaternion _startRotation;
+
+	private bool _alarmActivated;
+	public delegate void AlarmActivation(Vector3 playerPos, Vector3 spawnPoint, Door door);
+
+	public event AlarmActivation OnAlarmActivation;
 
 	// Use this for initialization
 	void Start()
 	{
-		_manager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
-		_fov = GetComponentInChildren<FieldOfView>();
-		startPosition = transform.position;
-		startRotation = transform.rotation;
+		_fieldOfView = GetComponentInChildren<FieldOfView>();
+		_startPosition = transform.position;
+		_startRotation = transform.rotation;
 	}
 
 	// Update is called once per frame
@@ -36,80 +38,72 @@ public class SurveillanceCamera : MonoBehaviour
 	{
 		CheckFov();
 
-		if (!targetInFov)
+		if (!_targetInFov)
 		{
-			_following = false;
-			transform.rotation = Quaternion.Euler(transform.eulerAngles.x, (Mathf.Sin(Time.realtimeSinceStartup) * rotate_amount) + transform.eulerAngles.y, transform.eulerAngles.z);
+			Rotate();
 		}
 		else
 		{
-			_following = true;
 			FollowTarget();
-			//if(!_gotTargetPosicion)
-				GetPlayerPosition(); 
+			
+			if (!_alarmActivated)
+				TriggerAlarm();
+			return;
 		}
 
-		if (!_moving && !targetInFov)
+		if (!_moving && !_targetInFov)
 		{
 			ResetPosition();
 		}
-
-
-		if (_callSecurity == false)
-			CheckIfAlarmOff();
 	}
 
-	void FollowTarget()
+	private void Rotate()
+	{
+		transform.rotation = Quaternion.Euler(transform.eulerAngles.x, (Mathf.Sin(Time.realtimeSinceStartup) * _rotateAmount) + transform.eulerAngles.y, transform.eulerAngles.z);
+	}
+
+	private void FollowTarget()
 	{
 		_moving = false;
-		_target = _fov.visibleTargets[_targetIndex].transform;
+		_target = _fieldOfView.visibleTargets[_targetIndex].transform;
 		transform.LookAt(_target);
 	}
 
-	void ResetPosition()
+	private void ResetPosition()
 	{
-		_following = false;
 		_moving = true;
-		transform.position = startPosition;
-		transform.rotation = startRotation;
+		transform.position = _startPosition;
+		transform.rotation = _startRotation;
 	}
 
-	void CheckFov()
+	private void CheckFov()
 	{
-		if (_fov.visibleTargets.Count > 0)
+		if (_fieldOfView.visibleTargets.Count > 0)
 		{
-			if (_fov.visibleTargets[0].layer == LayerMask.NameToLayer("Player"))
+			if (_fieldOfView.visibleTargets[0].layer == LayerMask.NameToLayer("Player"))
 			{
-				targetInFov = true;
-
-				if (_callSecurity)
-					CallSecurity();
+				_targetInFov = true;
 			}
 		}
 		else
 		{
-			targetInFov = false;
-			_gotTargetPosicion = false;
+			_targetInFov = false;
 		}
 	}
 
-	void CallSecurity()
+	private void TriggerAlarm()
 	{
-		_callSecurity = false;
-		_target = _fov.visibleTargets[_targetIndex].transform;
-		_manager.ActivateAlarm(_target.position, true, spawn, door, _fov.visibleTargets[_targetIndex].tag);
-	}
+		var manager = FindObjectOfType<AlarmsManager>();
+		
+		if (manager.IsAlarmActive()) return;
 
-	private void GetPlayerPosition()
-	{
-		_gotTargetPosicion = true;
-		print("GetPlayerPosition");
-		_manager.TellPlayerPosition(_fov.visibleTargets[0].transform.position, _fov.visibleTargets[0].tag);
-	}
+		_alarmActivated = true;
+		var playerPos = _fieldOfView.visibleTargets[0].transform.position;
+		
+		if (_door)
+			_door.OpenDoor();
 
-	private void CheckIfAlarmOff()
-	{
-		if (_manager.alarmOn == false)
-			_callSecurity = true;
+		OnAlarmActivation?.Invoke(playerPos, _spawnPoint.position, _door);
+		manager.OnDeactivation += () => { _alarmActivated = false; };
 	}
 }

@@ -8,6 +8,10 @@ public class AlarmGuard : BaseEnemy
     private Vector3 _spawnPosition;
 
     private bool _return;
+
+    public delegate void Return();
+
+    public event Return OnReturn;
     // Update is called once per frame
     protected override void Update()
     {
@@ -15,21 +19,18 @@ public class AlarmGuard : BaseEnemy
         
         if (_navMeshAgent.isStopped) return;
         
-        if (!_playerInFOV || _return)
+        if (_return && _navMeshAgent.remainingDistance <= 1f)
         {
-            if (_isChasing)
-            {
-                _isChasing = false;
-                _animator.SetBool("Chasing", false);
-            }
+            _animator.SetBool("Chasing", false);
+            
+            OnReturn?.Invoke();
         }
         if (_playerInFOV && !_return)
-             PlayerChase();
+            PlayerChase();
     }
     
     private void PlayerChase()
     {
-        Debug.Log("chase");
         if (!_isChasing)
         {
             _isChasing = true;
@@ -67,6 +68,7 @@ public class AlarmGuard : BaseEnemy
             StartCoroutine(RotateTowards(dir, true));
         }
         _navMeshAgent.SetDestination(_spawnPosition);
+        
     }
     
     private void OnCollisionEnter(Collision other)

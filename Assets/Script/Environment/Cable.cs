@@ -4,28 +4,24 @@ using UnityEngine;
 
 public class Cable : MonoBehaviour
 {
-
-	public bool activated;
-	MeshRenderer _renderer;
+	[SerializeField] private Color _activeColor;
+	private MeshRenderer _renderer;
+	private Color _defaultColor;
 
 	// Start is called before the first frame update
     void Start()
     {
 		_renderer = GetComponent<MeshRenderer>();
-		activated = false;
-	}
-
-    // Update is called once per frame
-    void Update()
-    {
-		if (activated)
-		{
-			ChangeColor();
-		}
+		_defaultColor = _renderer.material.color;
     }
 
-	void ChangeColor()
+    public void Activate()
 	{
-		_renderer.material.color = Color.green;
+		_renderer.material.color = _activeColor;
 	}
+
+    public void Deactivate()
+    {
+	    _renderer.material.color = _defaultColor;
+    }
 }
