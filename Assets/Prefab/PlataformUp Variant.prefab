@@ -69,10 +69,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dcdd4ef70158144c9b0f56042867ab4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  move: 0
+  _moveTime: 2
   speed: 2
-  _time: 0
-  maxTime: 4
   limits: {fileID: 1055529394}
 --- !u!1001 &6223307252224118379
 PrefabInstance:
@@ -84,7 +82,7 @@ PrefabInstance:
     - target: {fileID: 918264871442892368, guid: 397e71ac2fe4f4d959524578cfabd45b,
         type: 3}
       propertyPath: m_Name
-      value: PlataformUp
+      value: PlataformUp Variant
       objectReference: {fileID: 0}
     - target: {fileID: 918264871442892368, guid: 397e71ac2fe4f4d959524578cfabd45b,
         type: 3}

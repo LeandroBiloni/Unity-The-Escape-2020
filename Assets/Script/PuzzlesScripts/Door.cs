@@ -11,8 +11,8 @@ public class Door : MonoBehaviour
     [SerializeField] private bool _onlyOpen;
     private bool _isOpen;
 
-    [SerializeField] private List<Button> _buttons;
-    [SerializeField] private List<Switches> _switches = new List<Switches>();
+    private HashSet<Button> _buttons = new HashSet<Button>();
+    private HashSet<Switches> _switches = new HashSet<Switches>();
     
     [SerializeField] private Light _doorLight;
     [SerializeField] private Color _inactiveColor;
@@ -20,15 +20,11 @@ public class Door : MonoBehaviour
     public AudioManager audioManager;
     public AudioClip slideDoor;
     public AudioClip disconectDoor;
-    private Cable[] _cables;
+    [SerializeField] private List<Cable> _cables = new List<Cable>();
 
     private void Start()
     {
         audioManager = FindObjectOfType<AudioManager>();
-
-        var childs = transform.GetComponentsInChildren<Cable>();
-        
-        _cables = childs;
 
         foreach (var sw in _switches)
         {
@@ -145,7 +141,10 @@ public class Door : MonoBehaviour
     {
         StartCoroutine(MoveDoor(action));
         CablesOn();
-        _doorLight.color = _activeColor;
+        
+        if (_doorLight)
+            _doorLight.color = _activeColor;
+        
         audioManager.PlaySFX(slideDoor, 1f);
     }
 
@@ -204,6 +203,16 @@ public class Door : MonoBehaviour
             // materials[0].color = cablesDefaultColor;
             cable.Deactivate();
         }
+    }
+
+    public void AddButton(Button button)
+    {
+        _buttons.Add(button);
+    }
+
+    public void AddSwitch(Switches switches)
+    {
+        _switches.Add(switches);
     }
 
     public void CheckButtons()

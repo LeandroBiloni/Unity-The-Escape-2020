@@ -4,8 +4,10 @@ using UnityEngine;
 public class Button : MonoBehaviour
 {
     private bool _active = false;
+
+    [SerializeField] private List<Door> _doorsList;
     //public Transform[] myCables;
-    private Cable[] _cables;
+    [SerializeField] private List<Cable> _cables = new List<Cable>();
     [SerializeField] private GameObject _commandIcon;
     private Boy _boy;
     [SerializeField] private float _keyIconActivationDistance;
@@ -19,9 +21,13 @@ public class Button : MonoBehaviour
         _boy = FindObjectOfType<Boy>();
         _meshRenderer = GetComponent<MeshRenderer>();
         
-        var childs = transform.GetComponentsInChildren<Cable>();
-        
-        _cables = childs;
+        if (_doorsList.Count > 0)
+        {
+            foreach (var door in _doorsList)
+            {
+                door.AddButton(this);
+            }
+        }
     }
 
     private void Update()

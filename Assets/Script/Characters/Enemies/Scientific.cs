@@ -47,6 +47,7 @@ public class Scientific : BaseEnemy
         _isRunning = true;
         _navMeshAgent.isStopped = true;
         _animator.SetBool("MoveToAlarm", true);
+        //TODO: Que el manager le pase la alarma
         _navMeshAgent.SetDestination(alarm.position);
         _playerPos = _fieldOfView.visibleTargets[0].transform.position;
         var dir = (alarm.position - transform.position).normalized;

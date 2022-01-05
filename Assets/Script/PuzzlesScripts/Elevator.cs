@@ -5,23 +5,8 @@ using UnityEngine;
 public class Elevator : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private List<Button> _buttons = new List<Button>();
-
-    // Update is called once per frame
-    void Update()
-    {
-        // if (buttonA._active == true)
-        //     aStepped = true;
-        // else aStepped = false;
-        //
-        // if (buttonB._active == true)
-        //     bStepped = true;
-        // else bStepped = false;
-        //
-        // if (aStepped && bStepped)
-        //     Move();
-
-    }
+    private HashSet<ElevatorButton> _buttons = new HashSet<ElevatorButton>();
+    
 
     IEnumerator Move()
     {
@@ -31,7 +16,11 @@ public class Elevator : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
-    
+
+    public void AddButton(ElevatorButton button)
+    {
+        _buttons.Add(button);
+    }
     public void CheckButtons()
     {
         var count = 0;

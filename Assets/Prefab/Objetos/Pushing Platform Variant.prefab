@@ -93,7 +93,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e97d2ca73eefb4f98f1d0341bfd552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
+--- !u!65 &6195504038458212182
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8786637458414727910}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.23641478, y: 0.40241033, z: 0.36616325}
+  m_Center: {x: 0.010188003, y: -0.06173248, z: -0.001010893}
 --- !u!1001 &5141230514346241110
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110,6 +122,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542138525125117846, guid: 025248aa7affe4e249d1ecb153635008,
+        type: 3}
+      propertyPath: _commandIcon
+      value: 
+      objectReference: {fileID: 1086457812271565198}
+    - target: {fileID: 5542138525125117846, guid: 025248aa7affe4e249d1ecb153635008,
+        type: 3}
+      propertyPath: _keyIconActivationDistance
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6970021020066904098, guid: 025248aa7affe4e249d1ecb153635008,
         type: 3}
@@ -183,6 +205,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 025248aa7affe4e249d1ecb153635008, type: 3}
+--- !u!1 &8786637458414727910 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4515203732076682928, guid: 025248aa7affe4e249d1ecb153635008,
+    type: 3}
+  m_PrefabInstance: {fileID: 5141230514346241110}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2874190300766950516 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6970021020066904098, guid: 025248aa7affe4e249d1ecb153635008,

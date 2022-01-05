@@ -1,25 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Switches : MonoBehaviour
 {
-	[Header("Switches")]
-	[SerializeField] private Switches _previousSwitch;
-	[SerializeField] private Switches _nextSwitch;
+	[Header("Switches")] 
+	[SerializeField] private List<Switches> _switchesToInteract;
 	private bool _active;
-	public GameObject parentOfSwitches;
 	[Header("Doors")]
 	[SerializeField] private List<Door> _doorsList = new List<Door>();
 	public AudioClip stepSound;
-	[Header("Timer")]
-	public float maxTimeToUseAgain;
-	[Header("Cables")]
-	public Transform cableContainer;
 	private float _time;
 	private bool _canActivate;
-	public Color cablesDefaultColor;
-	private Cable[] _cables;
+	[SerializeField] private List<Cable> _cables = new List<Cable>();
 	private MeshRenderer _meshRenderer;
 
 	public delegate void Activation();
@@ -28,11 +22,15 @@ public class Switches : MonoBehaviour
 	
 	private void Start()
 	{
-		var childs = transform.GetComponentsInChildren<Cable>();
-        
-		_cables = childs;
-
 		_meshRenderer = GetComponent<MeshRenderer>();
+
+		if (_doorsList.Count > 0)
+		{
+			foreach (var door in _doorsList)
+			{
+				door.AddSwitch(this);
+			}
+		}
 	}
 	private void Update()
 	{
@@ -60,25 +58,32 @@ public class Switches : MonoBehaviour
 		_active = true;
 		
 		OnActivation?.Invoke();
+		
+		CablesOn();
+		
 		UpdateAdjacentSwitches();
 	}
 
 	void DeactivateSwitch()
 	{
 		_active = false;
+		
+		CablesOff();
+		
 		UpdateAdjacentSwitches();
 	}
 
 	void UpdateAdjacentSwitches()
 	{
-		_previousSwitch.UpdateState();
-
-		_nextSwitch.UpdateState();
+		foreach (var sw in _switchesToInteract)
+		{
+			sw.UpdateState();
+		}
 	}
 
-	private void OnCollisionEnter(Collision collision)
+	private void OnTriggerEnter(Collider other)
 	{
-		if(collision.gameObject.layer == LayerMask.NameToLayer("Player") && _canActivate)
+		if(other.gameObject.layer == LayerMask.NameToLayer("Player") && _canActivate)
 		{
 			if (!_active)
 				ActivateSwitch();
@@ -152,9 +157,7 @@ public class Switches : MonoBehaviour
 	{
 		foreach (var cable in _cables)
 		{
-			var render = cable.gameObject.GetComponent<Renderer>();
-			Material[] materials = render.materials;
-			materials[0].color = Color.green;
+			cable.Activate();
 		}
 	}
 
@@ -162,9 +165,7 @@ public class Switches : MonoBehaviour
 	{
 		foreach (var cable in _cables)
 		{
-			var render = cable.gameObject.GetComponent<Renderer>();
-			Material[] materials = render.materials;
-			materials[0].color = cablesDefaultColor;
+			cable.Deactivate();
 		}
 	}
 
