@@ -96,8 +96,6 @@ MonoBehaviour:
   _speed: 3
   _maxMoveTime: 2
   _onlyOpen: 0
-  _buttons: []
-  _switches: []
   _doorLight: {fileID: 0}
   _inactiveColor: {r: 1, g: 0, b: 0, a: 0}
   _activeColor: {r: 0.020272732, g: 1, b: 0, a: 0}
@@ -116,5 +114,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.1079001, y: 1.6650596, z: 0.16499388}
-  m_Center: {x: 0.5539535, y: 0.71465963, z: 0.012907235}
+  m_Size: {x: 1, y: 1.6650596, z: 0.3}
+  m_Center: {x: 0.5539535, y: 0.71465963, z: 0}
