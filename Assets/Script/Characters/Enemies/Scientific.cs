@@ -2,8 +2,8 @@
 
 public class Scientific : BaseEnemy
 {
-    public Transform alarm;
-    [SerializeField] private bool _isScared;
+    private Transform _alarm;
+    private bool _isScared;
     private bool _isRunning;
 
     private Vector3 _playerPos;
@@ -48,9 +48,9 @@ public class Scientific : BaseEnemy
         _navMeshAgent.isStopped = true;
         _animator.SetBool("MoveToAlarm", true);
         //TODO: Que el manager le pase la alarma
-        _navMeshAgent.SetDestination(alarm.position);
+        _navMeshAgent.SetDestination(_alarm.position);
         _playerPos = _fieldOfView.visibleTargets[0].transform.position;
-        var dir = (alarm.position - transform.position).normalized;
+        var dir = (_alarm.position - transform.position).normalized;
         
         if (CheckIfNeedToRotate(dir))
         {

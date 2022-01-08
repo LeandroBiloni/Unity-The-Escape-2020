@@ -158,4 +158,22 @@ public class BaseEnemy : Character
 
         _navMeshAgent.isStopped = false;
     }
+    
+    private void OnDrawGizmosSelected()
+    {
+        
+
+        for (int i = 0; i < _waypoints.Count; i++)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(_waypoints[i].position, 0.5f);
+
+            Gizmos.color = Color.blue;
+            if (i + 1 != _waypoints.Count)
+            {
+                Gizmos.DrawLine(_waypoints[i].position, _waypoints[i+1].position);
+            }
+            
+        }
+    }
 }
