@@ -30,8 +30,9 @@ public class PatrolGuard : BaseEnemy
         _navMeshAgent.SetDestination(playerPos);
     }
 
-    private void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other)
     {
+        base.OnCollisionEnter(other);
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             other.gameObject.GetComponent<Character>().Dead();

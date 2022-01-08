@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1311655329921941274}
   - component: {fileID: 3412456540176239680}
   - component: {fileID: 7542383174997543039}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Door (4) Variant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,5 +114,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.6650596, z: 0.3}
+  m_Size: {x: 1, y: 1.6650596, z: 0.7}
   m_Center: {x: 0.5539535, y: 0.71465963, z: 0}

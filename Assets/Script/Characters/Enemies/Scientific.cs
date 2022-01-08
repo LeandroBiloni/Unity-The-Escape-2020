@@ -63,12 +63,16 @@ public class Scientific : BaseEnemy
         }
         else
         {
+            _navMeshAgent.isStopped = true;
             _animator.SetBool("Dizzy", true);
+            _isRunning = false;
+            _isScared = true;
         }
     }
 
-    private void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other)
     {
+        base.OnCollisionEnter(other);
         var alarm = other.gameObject.GetComponent<AlarmComputer>();
         if (alarm && !_isScared)
         {

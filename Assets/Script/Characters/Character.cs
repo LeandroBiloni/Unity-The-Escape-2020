@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
     [SerializeField] protected float _moveSpeed;
+    protected float _speed;
     protected bool _canMove;
     
     protected bool _selected;
@@ -15,6 +17,7 @@ public class Character : MonoBehaviour
     [SerializeField] protected float _iconShowTime;
     
     protected FieldOfView _fieldOfView;
+    
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -23,6 +26,7 @@ public class Character : MonoBehaviour
         _animator = GetComponent<Animator>();
         _canMove = true;
         _selectionIcon.SetActive(false);
+        _speed = _moveSpeed;
     }
 
     // Update is called once per frame
@@ -59,7 +63,7 @@ public class Character : MonoBehaviour
         //transform.LookAt(transform.position + dir);
         //transform.position += dir.normalized * (_moveSpeed * Time.deltaTime);
         transform.rotation = Quaternion.LookRotation(dir);
-        transform.position += dir * (Time.deltaTime * _moveSpeed);
+        transform.position += dir * (Time.deltaTime * _speed);
 
         //TODO: Agregar sonido.
         //audMan.WalkingSound(dir);
@@ -102,5 +106,21 @@ public class Character : MonoBehaviour
     public virtual void Dead()
     {
         _canMove = false;
+    }
+
+    protected virtual void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            _speed = _moveSpeed/2;
+        }
+    }
+
+    protected virtual void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            _speed = _moveSpeed;
+        }
     }
 }
