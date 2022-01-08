@@ -15,10 +15,6 @@ public class Character : MonoBehaviour
     [SerializeField] protected float _iconShowTime;
     
     protected FieldOfView _fieldOfView;
-
-    protected Rigidbody _rigidbody;
-
-    protected MeshRenderer _meshRenderer;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -27,26 +23,22 @@ public class Character : MonoBehaviour
         _animator = GetComponent<Animator>();
         _canMove = true;
         _selectionIcon.SetActive(false);
-        _rigidbody = GetComponent<Rigidbody>();
-        _meshRenderer = GetComponent<MeshRenderer>();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!_meshRenderer.isVisible) return;
-        
         if (!_selected) return;
 
         if (_canMove)
         {
-            var x = Input.GetAxis("Horizontal");
-            var z = Input.GetAxis("Vertical");
+            var x = Input.GetAxis("Vertical");
+            var z = Input.GetAxis("Horizontal");
 
             if (x != 0 || z != 0)
             {
                 Vector3 dir = Vector3.zero;
-                dir = new Vector3(x, 0, z);
+                dir = new Vector3(x, 0, -z);
 
                 ManualMovement(dir);
             }
@@ -67,7 +59,7 @@ public class Character : MonoBehaviour
         //transform.LookAt(transform.position + dir);
         //transform.position += dir.normalized * (_moveSpeed * Time.deltaTime);
         transform.rotation = Quaternion.LookRotation(dir);
-        transform.position = Vector3.Lerp(transform.position, transform.position + dir, Time.deltaTime * _moveSpeed);
+        transform.position += dir * (Time.deltaTime * _moveSpeed);
 
         //TODO: Agregar sonido.
         //audMan.WalkingSound(dir);

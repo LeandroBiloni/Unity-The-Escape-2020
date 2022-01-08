@@ -13,7 +13,7 @@ public class Girl : Character
 	[SerializeField] private float _controlCooldown;
 	private bool _canControlEnemy = true;
 	private bool _controllingEnemy;
-	[SerializeField] private bool _inCooldown;
+	private bool _inCooldown;
 
     private bool _enemyInFOV;
     private int _enemyTargetIndex;

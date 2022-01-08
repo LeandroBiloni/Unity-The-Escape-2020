@@ -6,12 +6,12 @@ public class CharacterSelector : MonoBehaviour
     private Boy _boy;
 
     private Girl _girl;
-    
+
+    private GameObject _selectedCharacter; 
     public delegate void CharacterChange();
     
     public event CharacterChange OnBoySelect;
     public event CharacterChange OnGirlSelect;
-    public event CharacterChange OnCharacterChange;
 
     public delegate void FocusChange(GameObject target);
     public event FocusChange OnFocusChange;
@@ -23,8 +23,7 @@ public class CharacterSelector : MonoBehaviour
         
         _boy.Deselect();
         _girl.Select();
-        OnGirlSelect?.Invoke();
-        OnFocusChange?.Invoke(_girl.gameObject);
+        _selectedCharacter = _girl.gameObject;
     }
 
     // Update is called once per frame
@@ -42,14 +41,21 @@ public class CharacterSelector : MonoBehaviour
         if (_boy.IsSelected())
         {
             Debug.Log("if boy");
+            _selectedCharacter = _girl.gameObject;
             OnGirlSelect?.Invoke();
-            OnFocusChange?.Invoke(_girl.gameObject);
+            OnFocusChange?.Invoke(_selectedCharacter);
         }
         else if (_girl.IsSelected())
         {
             Debug.Log("if girl");
+            _selectedCharacter = _boy.gameObject;
             OnBoySelect?.Invoke();
-            OnFocusChange?.Invoke(_boy.gameObject);
+            OnFocusChange?.Invoke(_selectedCharacter);
         }
+    }
+
+    public GameObject GetSelectedCharacter()
+    {
+        return _selectedCharacter;
     }
 }

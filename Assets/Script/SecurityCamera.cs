@@ -62,11 +62,7 @@ public class SecurityCamera : MonoBehaviour
 		}
 	}
 
-	/*void Stop()
-	{
-		
-	}
-
+	/*
 	void ChangeRotation()
 	{
 		if (_rotation.y == maxRotation)
@@ -109,7 +105,5 @@ public class SecurityCamera : MonoBehaviour
 	private void GetPlayerPosition()
 	{
 		_gotTargetPos = true;
-		print("GetPlayerPosition");
-		_manager.TellPlayerPosition(_cameraFieldOfView.visibleTargets[0].transform.position,"");
 	}
 }

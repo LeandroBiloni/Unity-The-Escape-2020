@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-	private Transform _characterToFollow;
-	public GameManager manager;
+	[SerializeField] private Transform _characterToFollow;
 	public float smoothSpeed = 5;
 	public float moveSpeed;
 	public Vector3 offset;
@@ -20,6 +19,8 @@ public class CameraFollow : MonoBehaviour
 
 		var girl = FindObjectOfType<Girl>();
 		girl.OnControlChange += SetTarget;
+		
+		_characterToFollow = selector.GetSelectedCharacter().transform;
 	}
 
 	private void LateUpdate()

@@ -1,30 +1,44 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class AlarmsManager : MonoBehaviour
 {
+    public static AlarmsManager Instance;
     [SerializeField] private AlarmGuard _guard;
     [SerializeField] private float _alarmDuration;
     [SerializeField] private List<Light> _lights = new List<Light>();
     [SerializeField] private float _maxLightIntensity;
     [SerializeField] private float _minLightIntensity;
+    [SerializeField] private float _lightDefaultIntensity;
     [SerializeField] private float _lightOscilationSpeed;
+    [SerializeField] private Color _lightDefaultColor;
+    [SerializeField] private Color _lightAlarmColor;
     private bool _increaseIntensity;
     private bool _alarmActive;
-    
     public delegate void Activation();
 
     public event Activation OnDeactivation;
     // Start is called before the first frame update
     void Start()
     {
-        var alarms = FindObjectsOfType<Alarm>();
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+        
+        var alarms = FindObjectsOfType<AlarmComputer>();
 
         foreach (var alarm in alarms)
         {
             alarm.OnAlarmActivation += AlarmOn;
+            
         }
 
         var cameras = FindObjectsOfType<SurveillanceCamera>();
@@ -40,19 +54,27 @@ public class AlarmsManager : MonoBehaviour
         Debug.Log("effects on");
         _alarmActive = true;
         SpawnGuard(playerPos, spawnPoint, door);
+        foreach (var l in _lights)
+        {
+            l.color = _lightAlarmColor;
+        }
         StartCoroutine(LightsFlicker());
         //TODO: Sonidos
+        //audioManager.PlaySFX(alarmSound, 0.25f);
     }
 
     public void AlarmOff()
     {
-        Debug.Log("effects off");
         _alarmActive = false;
+        foreach (var l in _lights)
+        {
+            l.intensity = _lightDefaultIntensity;
+            l.color = _lightDefaultColor;
+        }
     }
     
     IEnumerator LightsFlicker()
     {
-        
         while (_alarmActive)
         {
             foreach (var l in _lights)
@@ -94,7 +116,7 @@ public class AlarmsManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        _alarmActive = false;
+        AlarmOff();
         
         action?.Invoke();
         
@@ -102,9 +124,13 @@ public class AlarmsManager : MonoBehaviour
 
         OnDeactivation = null;
     }
-
     public bool IsAlarmActive()
     {
         return _alarmActive;
+    }
+
+    private void OnDisable()
+    {
+        Destroy(Instance.gameObject);
     }
 }

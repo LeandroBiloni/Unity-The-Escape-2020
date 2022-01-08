@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Configuration;
+using UnityEngine;
 
 public class Scientific : BaseEnemy
 {
-    private Transform _alarm;
+    [SerializeField] private AlarmComputer _alarm;
     private bool _isScared;
     private bool _isRunning;
 
@@ -43,25 +44,32 @@ public class Scientific : BaseEnemy
     private void GoToAlarm()
     {
         StopCoroutine(RotateTowards(Vector3.zero, true));
-        
-        _isRunning = true;
-        _navMeshAgent.isStopped = true;
-        _animator.SetBool("MoveToAlarm", true);
-        //TODO: Que el manager le pase la alarma
-        _navMeshAgent.SetDestination(_alarm.position);
-        _playerPos = _fieldOfView.visibleTargets[0].transform.position;
-        var dir = (_alarm.position - transform.position).normalized;
-        
-        if (CheckIfNeedToRotate(dir))
+
+        if (_alarm)
         {
-            StartCoroutine(RotateTowards(dir, true));
+            _isRunning = true;
+            _navMeshAgent.isStopped = true;
+            _animator.SetBool("MoveToAlarm", true);
+            var alarmPosition = _alarm.transform.position;
+            _navMeshAgent.SetDestination(alarmPosition);
+            _playerPos = _fieldOfView.visibleTargets[0].transform.position;
+            var dir = (alarmPosition - transform.position).normalized;
+        
+            if (CheckIfNeedToRotate(dir))
+            {
+                StartCoroutine(RotateTowards(dir, true));
+            }
+            else _navMeshAgent.isStopped = false;
         }
-        else _navMeshAgent.isStopped = false;
+        else
+        {
+            _animator.SetBool("Dizzy", true);
+        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        var alarm = other.gameObject.GetComponent<Alarm>();
+        var alarm = other.gameObject.GetComponent<AlarmComputer>();
         if (alarm && !_isScared)
         {
             Debug.Log("alarm");

@@ -7,7 +7,7 @@ public class BaseEnemy : Character
 {
     [SerializeField] protected List<Transform> _waypoints = new List<Transform>();
 
-    [SerializeField] protected int _waypointsIndex;
+    protected int _waypointsIndex;
 
     protected bool _playerInFOV;
 
