@@ -6,9 +6,10 @@ using UnityEngine;
 public class MovingPlatformButton : MonoBehaviour
 {
 	[SerializeField] private GameObject _platform;
-	[SerializeField] private bool _moveForward;
 	[SerializeField] private bool _moveRight;
-	private bool _forward;
+	[SerializeField] private bool _moveLeft;
+	[SerializeField] private bool _moveForward;
+	[SerializeField] private bool _moveBackward;
 	[SerializeField] private float _speed = 1f;
 	private bool _activated;
 
@@ -22,32 +23,46 @@ public class MovingPlatformButton : MonoBehaviour
 	{
 		if (!_meshRenderer.isVisible) return; 
 		
-		if (_activated && !_moveForward)
+		if (_activated && _moveRight)
 		{
 			MoveRight();
+		}
+		else if(_activated && _moveLeft)
+		{
+			MoveLeft();
 		}
 		else if (_activated && _moveForward)
 		{
 			MoveForward();
 		}
+		else if (_activated && _moveBackward)
+		{
+			MoveBackward();
+		}
 	}
 
 	void MoveRight()
 	{
-		var right = Vector3.right * (_speed * Time.deltaTime);
-		if (_moveRight)
-			_platform.transform.position += right;
-		else
-			_platform.transform.position -= right;
+		Debug.Log("right");
+		_platform.transform.position += _platform.transform.right * (_speed * Time.deltaTime);;
+	}
+
+	void MoveLeft()
+	{
+		Debug.Log("left");
+		_platform.transform.position -= _platform.transform.right * (_speed * Time.deltaTime);;
 	}
 
 	void MoveForward()
 	{
-		var forward = Vector3.forward * (_speed * Time.deltaTime);
-		if (_forward)
-			_platform.transform.position += forward;
-		else
-			_platform.transform.position -= forward;
+		Debug.Log("forward");
+		_platform.transform.position += _platform.transform.forward * (_speed * Time.deltaTime);
+	}
+
+	void MoveBackward()
+	{
+		Debug.Log("backward");
+		_platform.transform.position -= _platform.transform.forward * (_speed * Time.deltaTime);
 	}
 	
 

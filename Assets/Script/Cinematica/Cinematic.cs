@@ -13,6 +13,11 @@ public class Cinematic : MonoBehaviour
 
 	static bool alreadyPlayed;
 
+	public delegate void MyCinematic();
+
+	public event MyCinematic OnCinematicEnd;
+	public event MyCinematic OnCinematicStart;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +26,7 @@ public class Cinematic : MonoBehaviour
 			firstCinematic.gameObject.SetActive(true);
 			thePlayer.gameObject.SetActive(false);
 			StartCoroutine(FirstCut());
+			
 		}
 	}
 
@@ -32,11 +38,14 @@ public class Cinematic : MonoBehaviour
 
     IEnumerator FirstCut()
     {
+	    yield return new WaitForEndOfFrame();
+	    OnCinematicStart?.Invoke();
 		alreadyPlayed = true;
         yield return new WaitForSeconds(timerFirstCinematic);
         firstCinematic.gameObject.SetActive(false);
         thePlayer.gameObject.SetActive(true);
 		thePlayer = Camera.main;
+		OnCinematicEnd?.Invoke();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -49,10 +58,12 @@ public class Cinematic : MonoBehaviour
 
     IEnumerator FinishCut()
     {
+	    OnCinematicStart?.Invoke();
         yield return new WaitForSeconds(Wait);
 		thePlayer.gameObject.SetActive(false);
         cutSceneCam.gameObject.SetActive(true);
         finalCam.gameObject.SetActive(true);
         finalCam = Camera.main;
+        OnCinematicEnd?.Invoke();
     }
 }

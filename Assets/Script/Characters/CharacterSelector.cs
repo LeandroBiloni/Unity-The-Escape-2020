@@ -40,14 +40,12 @@ public class CharacterSelector : MonoBehaviour
     {
         if (_boy.IsSelected())
         {
-            Debug.Log("if boy");
             _selectedCharacter = _girl.gameObject;
             OnGirlSelect?.Invoke();
             OnFocusChange?.Invoke(_selectedCharacter);
         }
         else if (_girl.IsSelected())
         {
-            Debug.Log("if girl");
             _selectedCharacter = _boy.gameObject;
             OnBoySelect?.Invoke();
             OnFocusChange?.Invoke(_selectedCharacter);

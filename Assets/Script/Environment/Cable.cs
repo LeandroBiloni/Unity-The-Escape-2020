@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,12 +9,12 @@ public class Cable : MonoBehaviour
 	private MeshRenderer _renderer;
 	private Color _defaultColor;
 
-	// Start is called before the first frame update
-    void Start()
-    {
+	private void Awake()
+	{
 		_renderer = GetComponent<MeshRenderer>();
 		_defaultColor = _renderer.material.color;
-    }
+	}
+
 
     public void Activate()
 	{

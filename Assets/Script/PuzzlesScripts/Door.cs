@@ -13,6 +13,9 @@ public class Door : MonoBehaviour
 
     private HashSet<Button> _buttons = new HashSet<Button>();
     private HashSet<Switches> _switches = new HashSet<Switches>();
+
+    private int _buttonsCount;
+    [SerializeField] private int _switchesCount;
     
     [SerializeField] private Light _doorLight;
     [SerializeField] private Color _inactiveColor;
@@ -25,116 +28,6 @@ public class Door : MonoBehaviour
     private void Start()
     {
         audioManager = FindObjectOfType<AudioManager>();
-
-        foreach (var sw in _switches)
-        {
-            sw.OnActivation += CheckSwitches;
-        }
-
-        foreach (var button in _buttons)
-        {
-            button.OnActivation += CheckButtons;
-        }
-        //myCables = new Transform[cableContainer.childCount];
-        //for (int i = 0; i < myCables.Length; i++)
-        //{
-        //    myCables[i] = cableContainer.GetChild(i);
-        //    var myCable = myCables[i].gameObject.GetComponent<Cable>();
-        //    cables.Add(myCable);
-        //}
-    }
-
-    private void Update()
-    {
-        // if (_onlyOpen)
-        // {
-        //     // if (openThroughComputer)
-        //     // {
-        //     //     OpenDoor();
-        //     //     if (_doorLight != null)
-        //     //         _doorLight.color = Color.green;
-        //     //     for (int i = 0; i < cables.Count; i++)
-        //     //     {
-        //     //         cables[i].activated = true;
-        //     //     }
-        //     //
-        //     // }
-        //     //
-        //     // if (openThroughSwitches)
-        //     // {
-        //     //     if (activeSwitches == _switches.Count)
-        //     //     {
-        //     //         OpenDoor();
-        //     //     if (_doorLight != null)
-        //     //         _doorLight.color = Color.green;
-        //     //     }
-        //     // }
-        //
-        // }
-
-        // if (cameraDoor)
-        // {
-        //     if (aStepped && bStepped && _stop == false)
-        //     {
-        //         OpenDoor();
-        //         if (_doorLight != null)
-        //             _doorLight.color = Color.green;
-        //         
-        //     }
-        //     else if (canClose)
-        //     {
-        //         CloseDoor();
-        //         if (_doorLight != null)
-        //             _doorLight.color = Color.red;
-        //     }
-        // }
-
-
-        // if (buttonA != null && buttonB != null)
-        // {
-        //
-        //     // if (buttonA._active == true)
-        //     //     aStepped = true;
-        //     // else aStepped = false;
-        //     //
-        //     // if (buttonB._active == true)
-        //     //     bStepped = true;
-        //     // else bStepped = false;
-        //
-        //     if (aStepped && bStepped)
-        //     {
-        //         if (_doorLight != null)
-        //             _doorLight.color = Color.green;
-        //         //canClose = false;
-        //         OpenDoor();
-        //         // if (_alreadyMoved == false)
-        //         //     _alreadyMoved = true;
-        //         if (activated == false)
-        //         {
-        //             print("funcion de sonido");
-        //             OpenSound();
-        //         }
-        //
-        //     }
-        //     // else if ((!aStepped || !bStepped) && canClose == false && _alreadyMoved)
-        //     //     canClose = true;
-        //
-        //     // if (canClose && _alreadyMoved)
-        //     // {
-        //     //     CloseDoor();
-        //     //
-        //     // }
-        // }
-        //
-        // if (aStepped == true && bStepped == true)
-        // {
-        //     activated = true;
-        // }
-        //
-        // if (aStepped == true && bStepped == false || aStepped ==false && aStepped == true || aStepped == false && bStepped == false)
-        // {
-        //     activated = false;
-        // }
     }
 
     public void OpenDoor(Action action = null)
@@ -187,9 +80,6 @@ public class Door : MonoBehaviour
     {
         foreach (var cable in _cables)
         {
-            // var render = cable.gameObject.GetComponent<Renderer>();
-            // Material[] materials = render.materials;
-            // materials[0].color = Color.green;
             cable.Activate();
         }
     }
@@ -198,9 +88,6 @@ public class Door : MonoBehaviour
     {
         foreach (var cable in _cables)
         {
-            // var render = cable.gameObject.GetComponent<Renderer>();
-            // Material[] materials = render.materials;
-            // materials[0].color = cablesDefaultColor;
             cable.Deactivate();
         }
     }
@@ -208,39 +95,67 @@ public class Door : MonoBehaviour
     public void AddButton(Button button)
     {
         _buttons.Add(button);
+        button.OnActivation += ActiveButton;
+        button.OnDeactivation += InactiveButton;
     }
 
-    public void AddSwitch(Switches switches)
+    public void AddSwitch(Switches @switch)
     {
-        _switches.Add(switches);
+        _switches.Add(@switch);
+        @switch.OnActivation += ActiveSwitch;
+        @switch.OnDeactivation += InactiveSwitch;
     }
 
-    public void CheckButtons()
+    private void CheckButtons()
     {
-        var count = 0;
-        foreach (var button in _buttons)
+        if (_buttonsCount == _buttons.Count)
+            OpenDoor();
+    }
+
+    private void CheckSwitches()
+    {
+        if (_switchesCount == _switches.Count)
         {
-            if (!button.IsActive()) return;
-
-            count++;
-            
-            if (count == _buttons.Count)
-                OpenDoor();
+            foreach (var sw in _switches)
+            {
+                if (!sw.IsActive())
+                {
+                    Debug.Log("return");
+                    return;
+                }
+            }
+            OpenDoor();
+            foreach (var s in _switches)
+            {
+                s.DeactivateInteraction();
+            }
         }
     }
 
-    public void CheckSwitches()
+    private void ActiveButton()
     {
-        var count = 0;
-        foreach (var sw in _switches)
-        {
-            if (!sw.IsActive()) return;
+        _buttonsCount++;
+        CheckButtons();
+    }
 
-            count++;
-            
-            if (count == _switches.Count)
-                OpenDoor();
-        }
+    private void InactiveButton()
+    {
+        _buttonsCount--;
+        if (_buttonsCount < 0)
+            _buttonsCount = 0;
+    }
+
+    private void ActiveSwitch()
+    {
+        _switchesCount++;
+        CheckSwitches();
+    }
+
+    private void InactiveSwitch()
+    {
+        _switchesCount--;
+        if (_switchesCount < 0)
+            _switchesCount = 0;
     }
 
     public bool IsOpen()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Button : MonoBehaviour
@@ -12,14 +13,22 @@ public class Button : MonoBehaviour
     private Boy _boy;
     [SerializeField] private float _keyIconActivationDistance;
     private MeshRenderer _meshRenderer;
-
+    private Color _defaultColor;
     public delegate void Activation();
 
     public event Activation OnActivation;
+    public event Activation OnDeactivation;
+
+    private void Awake()
+    {
+        
+    }
+
     private void Start()
     {
         _boy = FindObjectOfType<Boy>();
         _meshRenderer = GetComponent<MeshRenderer>();
+        _defaultColor = _meshRenderer.material.color;
         
         if (_doorsList.Count > 0)
         {
@@ -49,11 +58,11 @@ public class Button : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player")))
         {
             _active = true;       
+            _meshRenderer.material.color = Color.green;
             OnActivation?.Invoke();
             if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
             {
                 other.gameObject.transform.position = transform.position;
-                //other.attachedRigidbody.isKinematic = true;
             }
             CablesOn();
         }
@@ -63,12 +72,10 @@ public class Button : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player")))
         {
-            _active = false;      
-            // if(other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
-            // {
-            //     other.attachedRigidbody.isKinematic = false;
-            // }
+            _active = false;     
+            _meshRenderer.material.color = _defaultColor;
             CablesOff();
+            OnDeactivation?.Invoke();
         }
         
     }

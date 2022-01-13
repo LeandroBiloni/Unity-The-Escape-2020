@@ -5,25 +5,28 @@ using UnityEngine;
 
 public class Switches : MonoBehaviour
 {
+	[SerializeField] private bool _active;
 	[Header("Switches")] 
 	[SerializeField] private List<Switches> _switchesToInteract;
-	private bool _active;
 	[Header("Doors")]
 	[SerializeField] private List<Door> _doorsList = new List<Door>();
 	public AudioClip stepSound;
 	private float _time;
-	private bool _canActivate;
+	private bool _canInteract;
 	[SerializeField] private List<Cable> _cables = new List<Cable>();
 	private MeshRenderer _meshRenderer;
 
 	public delegate void Activation();
 
 	public event Activation OnActivation;
-	
-	private void Start()
+	public event Activation OnDeactivation;
+
+	private void Awake()
 	{
 		_meshRenderer = GetComponent<MeshRenderer>();
-
+		_meshRenderer.material.color = Color.red;
+		_canInteract = true;
+		
 		if (_doorsList.Count > 0)
 		{
 			foreach (var door in _doorsList)
@@ -32,45 +35,35 @@ public class Switches : MonoBehaviour
 			}
 		}
 	}
-	private void Update()
+
+	private void Start()
 	{
-		// if (_active)
-		// {
-		// 	MeshRenderer mesh = GetComponent<MeshRenderer>();
-		// 	mesh.material.color = Color.green;
-		// 	if (cables.Count != 0)
-		// 		CablesOn();
-		// }
-		// else
-		// {
-		// 	MeshRenderer mesh = GetComponent<MeshRenderer>();
-		// 	mesh.material.color = Color.red;
-		// 	if (cables.Count != 0)
-		// 		CablesOff();
-		// }
-		//
-		// if (_canActivate == false)
-		// 	ActivationTimer();
+		
+		if (_active)
+		{
+			_active = true;
+			_meshRenderer.material.color = Color.green;
+			CablesOn();
+			OnActivation?.Invoke();
+		}
 	}
 
 	void ActivateSwitch()
 	{
 		_active = true;
-		
-		OnActivation?.Invoke();
-		
-		CablesOn();
-		
+		_meshRenderer.material.color = Color.green;
 		UpdateAdjacentSwitches();
+		CablesOn();
+		OnActivation?.Invoke();
 	}
 
 	void DeactivateSwitch()
 	{
 		_active = false;
-		
-		CablesOff();
-		
+		_meshRenderer.material.color = Color.red;
 		UpdateAdjacentSwitches();
+		CablesOff();
+		OnDeactivation?.Invoke();
 	}
 
 	void UpdateAdjacentSwitches()
@@ -83,74 +76,13 @@ public class Switches : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(other.gameObject.layer == LayerMask.NameToLayer("Player") && _canActivate)
+		if(other.gameObject.layer == LayerMask.NameToLayer("Player") && _canInteract)
 		{
 			if (!_active)
 				ActivateSwitch();
 			else DeactivateSwitch();
-			
-			// if (_doorsList.Count > 0)
-			// {
-			// 	_doorsList[0].audioManager.PlaySFX(stepSound, 1.5f);
-			//
-			// }
-			// else
-			// {
-			// 	doorToOpen.audioManager.PlaySFX(stepSound, 1.5f);
-			// }
 		}
 	}
-
-	// void CheckSwitches()
-	// {
-	// 	List<Switches> allSwitches = new List<Switches>();
-	// 	for (int i = 0; i < parentOfSwitches.transform.childCount; i++)
-	// 	{
-	// 		allSwitches.Add(parentOfSwitches.transform.GetChild(i).GetComponent<Switches>());
-	// 	}
-	// 	//allSwitches.AddRange(FindObjectsOfType<Switches>());
-	//
-	// 	List<Switches> activatedSwitches = new List<Switches>();
-	//
-	// 	for (int i = 0; i < allSwitches.Count; i++)
-	// 	{
-	// 		if (allSwitches[i]._active)
-	// 		{
-	// 			activatedSwitches.Add(allSwitches[i]);
-	// 		}
-	// 		else
-	// 		{
-	// 			activatedSwitches.Remove(allSwitches[i]);
-	// 		}
-	// 	}
-	//
-	// 	if(activatedSwitches.Count == allSwitches.Count)
-	// 	{
-	// 		for (int i = 0; i < cables.Count; i++)
-	// 		{
-	// 			cables[i].activated = true;
-	// 		}
-	//
-	// 		for (int i = 0; i < _doorsList.Count; i++)
-	// 		{
-	// 			doorToOpen = _doorsList[i];
-	// 			doorToOpen.audioManager.PlaySFX(doorToOpen.disconectDoor);
-	// 			doorToOpen.openThroughComputer = true;
-	// 		}
-	// 	}
-	// }
-
-	// private void ActivationTimer()
-	// {
-	// 	_time += Time.deltaTime;
-	//
-	// 	if (_time >= maxTimeToUseAgain)
-	// 	{
-	// 		_canActivate = true;
-	// 		_time = 0;
-	// 	}
-	//
-	// }
 
 
 	private void CablesOn()
@@ -177,7 +109,23 @@ public class Switches : MonoBehaviour
 	private void UpdateState()
 	{
 		_active = !_active;
-		
-		if (_active) OnActivation?.Invoke();
+
+		if (_active)
+		{
+			_meshRenderer.material.color = Color.green;
+			CablesOn();
+			OnActivation?.Invoke();
+		}
+		else
+		{
+			_meshRenderer.material.color = Color.red;
+			CablesOff();
+			OnDeactivation?.Invoke();
+		}
+	}
+
+	public void DeactivateInteraction()
+	{
+		_canInteract = false;
 	}
 }

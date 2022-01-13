@@ -34,10 +34,13 @@ public class Scientific : BaseEnemy
     public override void Deselect()
     {
         base.Deselect();
-        _navMeshAgent.isStopped = true;
-        _canMove = false;
-        _isScared = true;
-        _animator.SetBool("Dizzy", true);
+        //_navMeshAgent.isStopped = true;
+        _navMeshAgent.isStopped = false;
+        // _canMove = false;
+        // _isScared = true;
+        _canMove = true;
+        _isScared = false;
+        //_animator.SetBool("Dizzy", true);
         GetComponent<MeshRenderer>().material.color = _originalColor;
     }
 
