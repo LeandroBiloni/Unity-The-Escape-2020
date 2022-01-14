@@ -13,7 +13,7 @@ public class Scientific : BaseEnemy
     {
         base.Update();
         
-        if (_isScared) return;
+        if (_isScared || _selected) return;
         
         if (!_isRunning) CheckWaypointDistance();
 

@@ -94,8 +94,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
-  _maxMoveTime: 2
+  _moveDistance: 5
   _onlyOpen: 0
+  _switchesCount: 0
   _doorLight: {fileID: 0}
   _inactiveColor: {r: 1, g: 0, b: 0, a: 0}
   _activeColor: {r: 0.020272732, g: 1, b: 0, a: 0}

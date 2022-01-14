@@ -16,8 +16,13 @@ public class AlarmsManager : MonoBehaviour
     [SerializeField] private float _lightOscilationSpeed;
     [SerializeField] private Color _lightDefaultColor;
     [SerializeField] private Color _lightAlarmColor;
+    [SerializeField] private AudioClip _alarmSound;
     private bool _increaseIntensity;
     private bool _alarmActive;
+
+    private int _spawnedGuards;
+    
+    private AudioManager _audioManager;
     public delegate void Activation();
 
     public event Activation OnDeactivation;
@@ -32,7 +37,8 @@ public class AlarmsManager : MonoBehaviour
         {
             Instance = this;
         }
-        
+
+        _audioManager = FindObjectOfType<AudioManager>();
         var alarms = FindObjectsOfType<AlarmComputer>();
 
         foreach (var alarm in alarms)
@@ -51,7 +57,6 @@ public class AlarmsManager : MonoBehaviour
 
     public void AlarmOn(Vector3 playerPos, Vector3 spawnPoint, Door door)
     {
-        Debug.Log("effects on");
         _alarmActive = true;
         SpawnGuard(playerPos, spawnPoint, door);
         foreach (var l in _lights)
@@ -59,13 +64,13 @@ public class AlarmsManager : MonoBehaviour
             l.color = _lightAlarmColor;
         }
         StartCoroutine(LightsFlicker());
-        //TODO: Sonidos
-        //audioManager.PlaySFX(alarmSound, 0.25f);
+        _audioManager.PlaySFX(_alarmSound, 0.25f);
     }
 
     public void AlarmOff()
     {
         _alarmActive = false;
+        _audioManager.StopSFX(_alarmSound);
         foreach (var l in _lights)
         {
             l.intensity = _lightDefaultIntensity;
@@ -95,13 +100,20 @@ public class AlarmsManager : MonoBehaviour
     
     private void SpawnGuard(Vector3 playerPos, Vector3 spawnPoint, Door door)
     {
+        _spawnedGuards++;
         var guard = Instantiate(_guard, spawnPoint, Quaternion.identity);
         guard.SetSpawnPosition(spawnPoint);
         guard.SetPlayerSeenPosition(playerPos);
 
-        if (door) guard.OnReturn += door.CloseDoor;
-
-        guard.OnReturn += () => { Debug.Log("door close"); };
+        if (door) guard.OnReturn += () =>
+        {
+            if (_spawnedGuards <= 1)
+            {
+                Debug.Log("door close"); 
+                door.CloseDoor();
+            }
+            _spawnedGuards--;
+        };
 
         StartCoroutine(AlarmTimer(guard.ReturnToSpawn));
     }

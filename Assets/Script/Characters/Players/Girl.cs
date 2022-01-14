@@ -132,8 +132,6 @@ public class Girl : Character
 
     IEnumerator ControlTimer()
     {
-	    Debug.Log("control timer");
-	    
 	    if (!_controllingEnemy) yield break;
 	    
 	    float time = _controlMaxTime;
@@ -141,7 +139,6 @@ public class Girl : Character
 	    while (time > 0)
 	    {
 		    if (_inCooldown) yield break;
-		    Debug.Log("control timer --");
 		    time -= Time.deltaTime;
 
 		    var value = time / _controlMaxTime;

@@ -55,8 +55,10 @@ public class Button : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player")))
+        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
         {
+            if (_active) return;
+            
             _active = true;       
             _meshRenderer.material.color = Color.green;
             OnActivation?.Invoke();
@@ -70,8 +72,10 @@ public class Button : MonoBehaviour
 
     private void OnTriggerExit(Collider other) 
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects") || (other.gameObject.layer == LayerMask.NameToLayer("Player")))
+        if (other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
         {
+            if (!_active) return;
+            
             _active = false;     
             _meshRenderer.material.color = _defaultColor;
             CablesOff();

@@ -10,10 +10,10 @@ public class SurveillanceCamera : MonoBehaviour
 	[SerializeField] private Door _door;
 	
 	[SerializeField] private float _rotateAmount;
-	private bool _targetInFov;
+	[SerializeField] private bool _targetInFov;
 
 	private int _targetIndex = 0;
-	private bool _moving;
+	[SerializeField] private bool _moving;
 	private FieldOfView _fieldOfView;
 	Transform _target;
 
@@ -38,11 +38,11 @@ public class SurveillanceCamera : MonoBehaviour
 	{
 		CheckFov();
 
-		if (!_targetInFov)
+		if (!_targetInFov && _moving)
 		{
 			Rotate();
 		}
-		else
+		else if (_targetInFov)
 		{
 			FollowTarget();
 			
@@ -65,7 +65,6 @@ public class SurveillanceCamera : MonoBehaviour
 	private void FollowTarget()
 	{
 		_moving = false;
-		_target = _fieldOfView.visibleTargets[_targetIndex].transform;
 		transform.LookAt(_target);
 	}
 
@@ -83,11 +82,13 @@ public class SurveillanceCamera : MonoBehaviour
 			if (_fieldOfView.visibleTargets[0].layer == LayerMask.NameToLayer("Player"))
 			{
 				_targetInFov = true;
+				_target = _fieldOfView.visibleTargets[0].transform;
 			}
 		}
 		else
 		{
 			_targetInFov = false;
+			_target = null;
 		}
 	}
 

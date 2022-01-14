@@ -24,6 +24,7 @@ public class AlarmGuard : BaseEnemy
             _animator.SetBool("Chasing", false);
             
             OnReturn?.Invoke();
+            Destroy(gameObject);
         }
         if (_playerInFOV && !_return)
             PlayerChase();

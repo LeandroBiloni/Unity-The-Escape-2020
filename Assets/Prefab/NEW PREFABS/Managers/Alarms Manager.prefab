@@ -52,3 +52,5 @@ MonoBehaviour:
   _lightOscilationSpeed: 2
   _lightDefaultColor: {r: 0.77647066, g: 0.9333334, b: 1, a: 1}
   _lightAlarmColor: {r: 1, g: 0.033018887, b: 0.07473208, a: 1}
+  _alarmSound: {fileID: 8300000, guid: 77666f7ad6b0b1c4cbd9f7276ac1a9b8, type: 3}
+  audioManager: {fileID: 0}

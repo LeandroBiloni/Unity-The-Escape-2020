@@ -8,7 +8,7 @@ public class Billboard : MonoBehaviour
 
 	private void Start()
 	{
-		_cam = GameObject.Find("Main Camera").transform;
+		_cam = FindObjectOfType<CameraFollow>().transform;
 		gameObject.SetActive(false);
 	}
 

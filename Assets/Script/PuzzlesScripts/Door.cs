@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 public class Door : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private float _maxMoveTime;
+    [SerializeField] private float _moveDistance;
     [SerializeField] private bool _onlyOpen;
     private bool _isOpen;
 
@@ -24,15 +24,17 @@ public class Door : MonoBehaviour
     public AudioClip slideDoor;
     public AudioClip disconectDoor;
     [SerializeField] private List<Cable> _cables = new List<Cable>();
+    private Vector3 _startPos;
 
     private void Start()
     {
         audioManager = FindObjectOfType<AudioManager>();
+        _startPos = transform.position;
     }
 
     public void OpenDoor(Action action = null)
     {
-        StartCoroutine(MoveDoor(action));
+        StartCoroutine(Open(action));
         CablesOn();
         
         if (_doorLight)
@@ -41,37 +43,42 @@ public class Door : MonoBehaviour
         audioManager.PlaySFX(slideDoor, 1f);
     }
 
-    IEnumerator MoveDoor(Action action = null)
+    IEnumerator Open(Action action = null)
     {
-        
-        var time = 0f;
-
-        while (time <= _maxMoveTime)
+        if (!_isOpen)
         {
-            if (!_isOpen)
+            while (transform.position.y > _startPos.y - _moveDistance)
             {
                 transform.position -= transform.up * (_speed * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
             }
-            else
-            {
-                if (_onlyOpen) yield break;
-                transform.position += transform.up * (_speed * Time.deltaTime);
-                
-            }
-            time += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-
-        _isOpen = !_isOpen;
+            _isOpen = true;
         
-        action?.Invoke();
+            action?.Invoke();
+        }
+    }
+
+    IEnumerator Close()
+    {
+        if (!_onlyOpen && _isOpen)
+        {
+            while (transform.position.y < _startPos.y)
+            {
+                transform.position += transform.up * (_speed * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
+
+            _isOpen = false; 
+        }
     }
 
     public void CloseDoor()
     {
-        StartCoroutine(MoveDoor());
+        StartCoroutine(Close());
         CablesOff();
-        _doorLight.color = _inactiveColor;
+        
+        if (_doorLight)
+                _doorLight.color = _inactiveColor;
     }
     
     
@@ -108,8 +115,9 @@ public class Door : MonoBehaviour
 
     private void CheckButtons()
     {
-        if (_buttonsCount == _buttons.Count)
+        if (_buttonsCount == _buttons.Count && !_isOpen)
             OpenDoor();
+        else if (!_onlyOpen && _isOpen) CloseDoor();
     }
 
     private void CheckSwitches()
@@ -143,6 +151,7 @@ public class Door : MonoBehaviour
         _buttonsCount--;
         if (_buttonsCount < 0)
             _buttonsCount = 0;
+        CheckButtons();
     }
 
     private void ActiveSwitch()

@@ -14,7 +14,7 @@ public class SpikeBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += transform.forward * (speed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
