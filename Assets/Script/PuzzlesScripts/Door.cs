@@ -9,7 +9,7 @@ public class Door : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _moveDistance;
     [SerializeField] private bool _onlyOpen;
-    private bool _isOpen;
+    [SerializeField] private bool _isOpen;
 
     private HashSet<Button> _buttons = new HashSet<Button>();
     private HashSet<Switches> _switches = new HashSet<Switches>();
@@ -34,6 +34,7 @@ public class Door : MonoBehaviour
 
     public void OpenDoor(Action action = null)
     {
+        StopAllCoroutines();
         StartCoroutine(Open(action));
         CablesOn();
         
@@ -47,12 +48,13 @@ public class Door : MonoBehaviour
     {
         if (!_isOpen)
         {
+            _isOpen = true;
             while (transform.position.y > _startPos.y - _moveDistance)
             {
                 transform.position -= transform.up * (_speed * Time.deltaTime);
                 yield return new WaitForEndOfFrame();
             }
-            _isOpen = true;
+            
         
             action?.Invoke();
         }
@@ -62,18 +64,21 @@ public class Door : MonoBehaviour
     {
         if (!_onlyOpen && _isOpen)
         {
+            _isOpen = false;
+            
             while (transform.position.y < _startPos.y)
             {
                 transform.position += transform.up * (_speed * Time.deltaTime);
                 yield return new WaitForEndOfFrame();
             }
 
-            _isOpen = false; 
+            
         }
     }
 
     public void CloseDoor()
     {
+        StopAllCoroutines();
         StartCoroutine(Close());
         CablesOff();
         
@@ -128,7 +133,6 @@ public class Door : MonoBehaviour
             {
                 if (!sw.IsActive())
                 {
-                    Debug.Log("return");
                     return;
                 }
             }

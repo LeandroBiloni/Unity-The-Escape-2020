@@ -159,10 +159,8 @@ public class BaseEnemy : Character
         _navMeshAgent.isStopped = false;
     }
     
-    private void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
-        
-
         for (int i = 0; i < _waypoints.Count; i++)
         {
             Gizmos.color = Color.red;

@@ -92,7 +92,6 @@ public class Boy : Character
     /// </summary>
     IEnumerator Telekinesis()
     {
-        Debug.Log("Pulling");
         _pulling = true;
         //TODO: Agregar el sonido
         //manager.audioManager.PlaySFX(pullBoxSound);

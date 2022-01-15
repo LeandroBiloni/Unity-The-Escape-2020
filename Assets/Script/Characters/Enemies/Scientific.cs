@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections;
 using UnityEngine;
 
 public class Scientific : BaseEnemy
 {
     [SerializeField] private AlarmComputer _alarm;
+    [SerializeField] private Transform _hideSpot; //Para que no active la alarma a cada rato
     private bool _isScared;
     private bool _isRunning;
 
@@ -67,10 +68,8 @@ public class Scientific : BaseEnemy
         }
         else
         {
-            _navMeshAgent.isStopped = true;
-            _animator.SetBool("Dizzy", true);
-            _isRunning = false;
-            _isScared = true;
+            _navMeshAgent.SetDestination(_hideSpot.position);
+            _isRunning = true;
         }
     }
 
@@ -80,12 +79,36 @@ public class Scientific : BaseEnemy
         if (alarm && !_isScared)
         {
             Debug.Log("alarm");
-            _navMeshAgent.isStopped = true;
-            _isRunning = false;
-            _isScared = true;
-            _animator.SetBool("Dizzy", true);
-            _animator.SetBool("MoveToAlarm", false);
+            
             alarm.TriggerAlarm(_playerPos);
+
+            _navMeshAgent.SetDestination(_hideSpot.position);
+            StartCoroutine(CheckDistanceToHide());
+        }
+    }
+
+    IEnumerator CheckDistanceToHide()
+    {
+        while (_navMeshAgent.remainingDistance >= 1)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        
+        _navMeshAgent.isStopped = true;
+        _isRunning = false;
+        _isScared = true;
+        _animator.SetBool("Dizzy", true);
+        _animator.SetBool("MoveToAlarm", false);
+    }
+
+    protected override void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+
+        if (_hideSpot)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube(_hideSpot.position, Vector3.one); 
         }
     }
 }
