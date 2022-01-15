@@ -44,7 +44,7 @@ public class CharacterSelector : MonoBehaviour
             OnGirlSelect?.Invoke();
             OnFocusChange?.Invoke(_selectedCharacter);
         }
-        else if (_girl.IsSelected())
+        else if (_girl.IsSelected() && !_girl.IsControllingEnemy())
         {
             _selectedCharacter = _boy.gameObject;
             OnBoySelect?.Invoke();

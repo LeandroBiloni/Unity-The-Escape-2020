@@ -189,7 +189,7 @@ public class Girl : Character
     
     private void EnemyInPlayerFOV(bool watching, BaseEnemy selectedEnemy)
 	{
-		if (watching)
+		if (watching && _canControlEnemy)
 		{
 			if (_selectedEnemy == null)
 			{
@@ -243,5 +243,10 @@ public class Girl : Character
     {
 	    base.Dead();
 	    _canControlEnemy = false;
+    }
+
+    public bool IsControllingEnemy()
+    {
+	    return _controllingEnemy;
     }
 }

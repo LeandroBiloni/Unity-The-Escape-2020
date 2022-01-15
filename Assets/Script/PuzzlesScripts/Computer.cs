@@ -15,8 +15,9 @@ public class Computer : MonoBehaviour
     {
         var scientific = other.gameObject.GetComponent<Scientific>();
 
-        if (scientific)
+        if (scientific && scientific.IsSelected())
         {
+            _activationKeyIcon.SetActive(true);
             if (Input.GetKeyDown(_interactionKey))
             {
                 Activate();

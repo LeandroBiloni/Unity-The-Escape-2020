@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class BaseEnemy : Character
 {
     [SerializeField] protected List<Transform> _waypoints = new List<Transform>();
-
+    [SerializeField] protected ParticleSystem _particle;
+    [SerializeField] private GameObject _interactionIcon;
     protected int _waypointsIndex;
 
     protected bool _playerInFOV;
@@ -38,12 +39,13 @@ public class BaseEnemy : Character
 
     public void UnitInPlayerFOV()
     {
-        GetComponent<MeshRenderer>().material.color = Color.red;
+        if (!_selected)
+            _interactionIcon.SetActive(true);
     }
 
     public void UnitOutOfPlayerFOV()
     {
-        GetComponent<MeshRenderer>().material.color = _originalColor;
+        _interactionIcon.SetActive(false);
     }
 
     public override void Select()
@@ -51,6 +53,13 @@ public class BaseEnemy : Character
         base.Select();
         _canMove = true;
         _navMeshAgent.isStopped = true;
+        _interactionIcon.SetActive(false);
+        if (_particle)
+        {
+            _particle.gameObject.SetActive(true);
+            _particle.Play();
+        }
+        
         _animator.SetFloat("VelZ", 0);
         GetComponent<MeshRenderer>().material.color = _originalColor;
     }
@@ -59,6 +68,13 @@ public class BaseEnemy : Character
     {
         base.Deselect();
         _navMeshAgent.isStopped = false;
+
+        if (_particle)
+        {
+            _particle.Stop(false,ParticleSystemStopBehavior.StopEmitting);
+            _particle.gameObject.SetActive(false);
+        }
+        
         GetComponent<MeshRenderer>().material.color = _originalColor;
     }
     
@@ -73,6 +89,11 @@ public class BaseEnemy : Character
         {
             _playerInFOV = false;
         }
+    }
+
+    protected virtual void OnPlayerFOV()
+    {
+        
     }
 
     protected void WaypointSelection()
