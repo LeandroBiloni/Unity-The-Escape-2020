@@ -22,6 +22,18 @@ public class Character : MonoBehaviour
     protected virtual void Start()
     {
         _fieldOfView = GetComponent<FieldOfView>();
+
+        var cinematic = FindObjectOfType<Cinematic>();
+        cinematic.OnCinematicStart += () =>
+        {
+            _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
+            _fieldOfView.enabled = false;
+        };
+        cinematic.OnCinematicEnd += () =>
+        {
+            _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
+            _fieldOfView.enabled = true;
+        };
         _selectionIcon.SetActive(false);
         _animator = GetComponent<Animator>();
         _canMove = true;

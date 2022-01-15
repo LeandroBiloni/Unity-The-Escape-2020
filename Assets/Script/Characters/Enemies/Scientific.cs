@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using UnityEngine;
 
 public class Scientific : BaseEnemy
@@ -73,9 +74,8 @@ public class Scientific : BaseEnemy
         }
     }
 
-    protected virtual void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        base.OnCollisionEnter(other);
         var alarm = other.gameObject.GetComponent<AlarmComputer>();
         if (alarm && !_isScared)
         {

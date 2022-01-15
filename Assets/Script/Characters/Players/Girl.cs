@@ -80,7 +80,6 @@ public class Girl : Character
     {
 	    if (_controllingEnemy || _inCooldown) return;
 	    
-	    Debug.Log("control enemy");
 	    //If not controlling an enemy controls it.
 	    if (_canControlEnemy)
 	    {
@@ -100,7 +99,6 @@ public class Girl : Character
     {
 	    if (!_controllingEnemy) return;
 	    
-	    Debug.Log("control enemy cancel");
 	    //If controlling an enemy, cancels the control.
 	    _canMove = true;
 	    _controllingEnemy = false;
