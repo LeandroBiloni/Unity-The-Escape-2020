@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour
         _girlOffIcon.SetActive(false);
         _boyOnIcon.SetActive(false);
         
-        _girlPowerBar.transform.gameObject.SetActive(true);
+        _girlPowerBar.transform.parent.gameObject.SetActive(true);
     }
 
     private void BoyIconOn()
@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour
         _boyOffIcon.SetActive(false);
         _girlOnIcon.SetActive(false);
         
-        _girlPowerBar.transform.gameObject.SetActive(false);
+        _girlPowerBar.transform.parent.gameObject.SetActive(false);
     }
 
     private void UpdateControlTimeBar(float value)

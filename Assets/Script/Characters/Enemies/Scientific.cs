@@ -50,27 +50,31 @@ public class Scientific : BaseEnemy
     {
         StopCoroutine(RotateTowards(Vector3.zero, true));
 
+        _isRunning = true;
+        _navMeshAgent.isStopped = true;
+        _animator.SetBool("MoveToAlarm", true);
+        var dir = Vector3.zero;
         if (_alarm)
         {
-            _isRunning = true;
-            _navMeshAgent.isStopped = true;
-            _animator.SetBool("MoveToAlarm", true);
             var alarmPosition = _alarm.transform.position;
             _navMeshAgent.SetDestination(alarmPosition);
             _playerPos = _fieldOfView.visibleTargets[0].transform.position;
-            var dir = (alarmPosition - transform.position).normalized;
-        
-            if (CheckIfNeedToRotate(dir))
-            {
-                StartCoroutine(RotateTowards(dir, true));
-            }
-            else _navMeshAgent.isStopped = false;
+            dir = (alarmPosition - transform.position).normalized;
         }
         else
         {
             _navMeshAgent.SetDestination(_hideSpot.position);
             _isRunning = true;
+
+            dir = (_hideSpot.position - transform.position).normalized;
+            StartCoroutine(CheckDistanceToHide());
         }
+        
+        if (CheckIfNeedToRotate(dir))
+        {
+            StartCoroutine(RotateTowards(dir, true));
+        }
+        else _navMeshAgent.isStopped = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -78,8 +82,6 @@ public class Scientific : BaseEnemy
         var alarm = other.gameObject.GetComponent<AlarmComputer>();
         if (alarm && !_isScared)
         {
-            Debug.Log("alarm");
-            
             alarm.TriggerAlarm(_playerPos);
 
             _navMeshAgent.SetDestination(_hideSpot.position);
@@ -93,7 +95,6 @@ public class Scientific : BaseEnemy
         {
             yield return new WaitForEndOfFrame();
         }
-        
         _navMeshAgent.isStopped = true;
         _isRunning = false;
         _isScared = true;
