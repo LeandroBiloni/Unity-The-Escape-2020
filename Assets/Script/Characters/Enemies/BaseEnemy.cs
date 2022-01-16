@@ -7,14 +7,16 @@ public class BaseEnemy : Character
 {
     [SerializeField] protected List<Transform> _waypoints = new List<Transform>();
     [SerializeField] protected ParticleSystem _particle;
-    [SerializeField] private GameObject _interactionIcon;
+    
+    [SerializeField] protected GameObject _interactionIcon;
+    [SerializeField] protected float _talkTime;
+    protected bool _canBeControlled;
+    protected bool _isTalking;
     protected int _waypointsIndex;
 
     protected bool _playerInFOV;
 
     protected bool _forward;
-    
-    protected Color _originalColor;
 
     protected NavMeshAgent _navMeshAgent;
     // Start is called before the first frame update
@@ -22,7 +24,8 @@ public class BaseEnemy : Character
     {
         base.Start();
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        _originalColor = GetComponent<MeshRenderer>().material.color;
+
+        _canBeControlled = true;
         
         _forward = true;
         
@@ -37,6 +40,12 @@ public class BaseEnemy : Character
     protected override void Update()
     {
         base.Update();
+
+        if (_isTalking)
+        {
+            _interactionIcon.SetActive(false);
+            return;
+        }
         
         CheckPlayerInFOV();
     }
@@ -57,6 +66,7 @@ public class BaseEnemy : Character
         base.Select();
         _canMove = true;
         _navMeshAgent.isStopped = true;
+        StopCoroutine(RotateTowards(Vector3.zero,false));
         _interactionIcon.SetActive(false);
         if (_particle)
         {
@@ -65,7 +75,8 @@ public class BaseEnemy : Character
         }
         
         _animator.SetFloat("VelZ", 0);
-        GetComponent<MeshRenderer>().material.color = _originalColor;
+        
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     public override void Deselect()
@@ -78,8 +89,6 @@ public class BaseEnemy : Character
             _particle.Stop(false,ParticleSystemStopBehavior.StopEmitting);
             _particle.gameObject.SetActive(false);
         }
-        
-        GetComponent<MeshRenderer>().material.color = _originalColor;
     }
     
     protected void CheckPlayerInFOV()
@@ -93,11 +102,6 @@ public class BaseEnemy : Character
         {
             _playerInFOV = false;
         }
-    }
-
-    protected virtual void OnPlayerFOV()
-    {
-        
     }
 
     protected void WaypointSelection()
@@ -198,5 +202,10 @@ public class BaseEnemy : Character
             }
             
         }
+    }
+
+    public bool CanBeControlled()
+    {
+        return _canBeControlled;
     }
 }

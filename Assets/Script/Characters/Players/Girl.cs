@@ -95,7 +95,7 @@ public class Girl : Character
 	    
     }
 
-    private void CancelEnemyControl()
+    public void CancelEnemyControl()
     {
 	    if (!_controllingEnemy) return;
 	    
@@ -193,17 +193,24 @@ public class Girl : Character
 		{
 			if (_selectedEnemy == null)
 			{
-				_selectedEnemy = selectedEnemy;
-				selectedEnemy.UnitInPlayerFOV();
+				
+				if (selectedEnemy && selectedEnemy.CanBeControlled())
+				{
+					_selectedEnemy = selectedEnemy;
+					selectedEnemy.UnitInPlayerFOV();
+				}
 			}
 
 			if (_selectedEnemy != selectedEnemy)
 			{
 				_selectedEnemy.UnitOutOfPlayerFOV();
 
-				_selectedEnemy = selectedEnemy;
+				if (selectedEnemy.CanBeControlled())
+				{
+					_selectedEnemy = selectedEnemy;
 				
-				selectedEnemy.UnitInPlayerFOV();
+					selectedEnemy.UnitInPlayerFOV();
+				}
 			}
 		}
 		else if (_selectedEnemy && !watching && !_controllingEnemy)

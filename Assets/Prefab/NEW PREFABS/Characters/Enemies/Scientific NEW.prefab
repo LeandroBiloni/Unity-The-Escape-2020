@@ -1059,7 +1059,7 @@ MonoBehaviour:
   viewAngle: 57
   targetMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1536
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
@@ -1108,6 +1108,8 @@ MonoBehaviour:
   _waypoints: []
   _particle: {fileID: 2304797950634524636}
   _interactionIcon: {fileID: 2642665048614951850}
+  _talkTime: 5
+  _talkKey: 101
   _alarm: {fileID: 0}
   _hideSpot: {fileID: 0}
 --- !u!1 &4443903889604446505

@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PatrolGuard : BaseEnemy
 {
     private bool _isChasing;
-
+    [SerializeField] private KeyCode _talkKey;
     // Update is called once per frame
     protected override void Update()
     {
@@ -41,5 +42,40 @@ public class PatrolGuard : BaseEnemy
             
             //TODO: derrota
         }
+    }
+
+    public void InScientificFOV()
+    {
+        _interactionIcon.SetActive(true);
+    }
+
+    public void OutOfScientificFOV()
+    {
+        _interactionIcon.SetActive(false);
+    }
+
+    public void StopToTalk()
+    {
+        _navMeshAgent.isStopped = true;
+        _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
+        _fieldOfView.enabled = false;
+        _canBeControlled = false;
+        _isTalking = true;
+        _animator.SetFloat("VelZ", 0);
+    }
+
+    public void StartTalk()
+    {
+        StartCoroutine(TalkTimer());
+    }
+
+    IEnumerator TalkTimer()
+    {
+        yield return new WaitForSeconds(_talkTime);
+        _canBeControlled = true;
+        _isTalking = false;
+        _navMeshAgent.isStopped = false;
+        _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
+        _fieldOfView.enabled = true;
     }
 }

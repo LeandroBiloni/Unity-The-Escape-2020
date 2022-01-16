@@ -4,46 +4,56 @@ using UnityEngine;
 
 public class Scientific : BaseEnemy
 {
+    [SerializeField] private KeyCode _talkKey;
     [SerializeField] private AlarmComputer _alarm;
     [SerializeField] private Transform _hideSpot; //Para que no active la alarma a cada rato
     private bool _isScared;
     private bool _isRunning;
 
     private Vector3 _playerPos;
+
+    private PatrolGuard _guardInFOV;
+
+    
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
-        
-        if (_isScared || _selected) return;
+
+        if (_selected)
+        { 
+            _navMeshAgent.isStopped = true;
+            CheckGuardInFOV();
+
+            if (_guardInFOV && Input.GetKeyDown(_talkKey))
+            {
+                TalkToGuard();
+            }
+            return;
+        }
+        if (_isScared || _isTalking) return;
         
         if (!_isRunning) CheckWaypointDistance();
 
-        if (_playerInFOV && !_isRunning) GoToAlarm();
+        if (!_selected && _playerInFOV && !_isRunning) GoToAlarm();
     }
     
     public override void Select()
     {
         base.Select();
-        _canMove = true;
-        _navMeshAgent.isStopped = true;
         _animator.SetFloat("VelZ", 0);
         _animator.SetBool("MoveToAlarm", false);
         _animator.SetBool("Dizzy", false);
-        GetComponent<MeshRenderer>().material.color = _originalColor;
+        _isRunning = false;
+        _navMeshAgent.isStopped = true;
     }
 
     public override void Deselect()
     {
         base.Deselect();
-        //_navMeshAgent.isStopped = true;
         _navMeshAgent.isStopped = false;
-        // _canMove = false;
-        // _isScared = true;
         _canMove = true;
         _isScared = false;
-        //_animator.SetBool("Dizzy", true);
-        GetComponent<MeshRenderer>().material.color = _originalColor;
     }
 
     private void GoToAlarm()
@@ -111,5 +121,66 @@ public class Scientific : BaseEnemy
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(_hideSpot.position, Vector3.one); 
         }
+    }
+
+    private void CheckGuardInFOV()
+    {
+        if (_isTalking) return;
+        
+        if (_fieldOfView.visibleTargets.Count > 0)
+        {
+            if (_fieldOfView.visibleTargets[0].tag == "Patrol")
+            {
+                _guardInFOV = _fieldOfView.visibleTargets[0].GetComponent<PatrolGuard>();
+                _guardInFOV.InScientificFOV();
+            }
+        }
+        else
+        {
+            if (_guardInFOV)
+            {
+                _guardInFOV.OutOfScientificFOV();
+                _guardInFOV = null;
+            }
+        }
+    }
+
+    public void TalkToGuard()
+    {
+        FindObjectOfType<Girl>().CancelEnemyControl();
+        _guardInFOV.StopToTalk();
+
+        _navMeshAgent.SetDestination(_guardInFOV.transform.position);
+        _canBeControlled = false;
+        _isTalking = true;
+        _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
+        _fieldOfView.enabled = false;
+        
+        StartCoroutine(TalkTimer());
+        
+        
+    }
+    
+    IEnumerator TalkTimer()
+    {
+        while (_navMeshAgent.remainingDistance >= 1)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        
+        _animator.SetFloat("VelZ", 0);
+        
+        //GetComponent<Rigidbody>().velocity = Vector3.zero;
+        
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.SetDestination(transform.position);
+        _guardInFOV.StartTalk();
+        
+        yield return new WaitForSeconds(_talkTime);
+        _canBeControlled = true;
+        _isTalking = false;
+        _navMeshAgent.isStopped = false;
+        _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
+        _fieldOfView.enabled = true;
     }
 }
