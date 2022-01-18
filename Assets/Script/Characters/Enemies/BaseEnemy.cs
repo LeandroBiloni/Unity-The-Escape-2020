@@ -25,8 +25,6 @@ public class BaseEnemy : Character
         base.Start();
         _navMeshAgent = GetComponent<NavMeshAgent>();
 
-        _canBeControlled = true;
-        
         _forward = true;
         
         if (_waypoints.Count > 0)

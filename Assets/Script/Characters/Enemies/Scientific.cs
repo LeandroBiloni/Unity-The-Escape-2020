@@ -14,7 +14,13 @@ public class Scientific : BaseEnemy
 
     private PatrolGuard _guardInFOV;
 
-    
+
+    protected override void Start()
+    {
+        base.Start();
+        _canBeControlled = true;
+    }
+
     // Update is called once per frame
     protected override void Update()
     {
@@ -90,7 +96,7 @@ public class Scientific : BaseEnemy
     private void OnTriggerEnter(Collider other)
     {
         var alarm = other.gameObject.GetComponent<AlarmComputer>();
-        if (alarm && !_isScared)
+        if (alarm && !_selected && !_isScared)
         {
             alarm.TriggerAlarm(_playerPos);
 

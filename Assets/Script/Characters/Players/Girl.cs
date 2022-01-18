@@ -201,7 +201,7 @@ public class Girl : Character
 				}
 			}
 
-			if (_selectedEnemy != selectedEnemy)
+			if (_selectedEnemy && _selectedEnemy != selectedEnemy)
 			{
 				_selectedEnemy.UnitOutOfPlayerFOV();
 

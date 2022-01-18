@@ -59,7 +59,6 @@ public class PatrolGuard : BaseEnemy
         _navMeshAgent.isStopped = true;
         _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
         _fieldOfView.enabled = false;
-        _canBeControlled = false;
         _isTalking = true;
         _animator.SetFloat("VelZ", 0);
     }
@@ -72,7 +71,6 @@ public class PatrolGuard : BaseEnemy
     IEnumerator TalkTimer()
     {
         yield return new WaitForSeconds(_talkTime);
-        _canBeControlled = true;
         _isTalking = false;
         _navMeshAgent.isStopped = false;
         _fieldOfView.viewMeshFilter.gameObject.SetActive(true);

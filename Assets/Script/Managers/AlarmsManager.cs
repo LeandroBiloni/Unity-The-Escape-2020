@@ -109,7 +109,6 @@ public class AlarmsManager : MonoBehaviour
         {
             if (_spawnedGuards <= 1)
             {
-                Debug.Log("door close"); 
                 door.CloseDoor();
             }
             _spawnedGuards--;
