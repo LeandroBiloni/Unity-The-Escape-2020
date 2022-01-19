@@ -7,7 +7,6 @@ public class Elevator : MonoBehaviour
     [SerializeField] private float _speed;
     private HashSet<ElevatorButton> _buttons = new HashSet<ElevatorButton>();
     
-
     IEnumerator Move()
     {
         while (true)

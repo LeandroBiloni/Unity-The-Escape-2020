@@ -6,17 +6,7 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-	//PLAYERS AND ABILITIES
-	[Header ("PLAYERS AND ABILITIES")]
-	public bool checkpointsReached;
-	public static bool checkpointStatic;
-
-	//ALARMS
-	[Header("ALARMS")]
-	public AudioClip alarmSound;
 	public AudioClip music;
-	public AudioClip step1;
-	public AudioClip step2;
 
 
 	//MANAGERS
@@ -34,7 +24,6 @@ public class GameManager : MonoBehaviour
 	private bool _canCheckKeys;
 	private void Awake()
 	{
-		checkpointsReached = checkpointStatic;
 		sceneManager = FindObjectOfType<ScenesManager>();
 	}
 
@@ -49,6 +38,15 @@ public class GameManager : MonoBehaviour
 		audioManager.PlayMusic(music);
 
 		pauseScreen.SetActive(false);
+
+		if (Memory.Instance.checkpointReached)
+		{
+			var girl = FindObjectOfType<Girl>();
+			girl.transform.position = Memory.Instance.GetGirlPosition();
+
+			var boy = FindObjectOfType<Boy>();
+			boy.transform.position = Memory.Instance.GetBoyPosition();
+		}
 	}
 
 	// Update is called once per frame
@@ -56,11 +54,6 @@ public class GameManager : MonoBehaviour
 	{
 		if (_canCheckKeys)
 			CheckKeys();
-		
-		if (checkpointsReached)
-		{
-			checkpointStatic = true;
-		}
 	}
 
 

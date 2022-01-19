@@ -118,6 +118,14 @@ public class Character : MonoBehaviour
     public virtual void Dead()
     {
         _canMove = false;
+
+        StartCoroutine(LoseDelay());
+    }
+
+    IEnumerator LoseDelay()
+    {
+        yield return new WaitForSeconds(1.5f);
+        FindObjectOfType<ScenesManager>().LoseScreen();
     }
 
     protected virtual void OnCollisionEnter(Collision other)

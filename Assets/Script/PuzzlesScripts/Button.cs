@@ -19,11 +19,6 @@ public class Button : MonoBehaviour
     public event Activation OnActivation;
     public event Activation OnDeactivation;
 
-    private void Awake()
-    {
-        
-    }
-
     private void Start()
     {
         _boy = FindObjectOfType<Boy>();

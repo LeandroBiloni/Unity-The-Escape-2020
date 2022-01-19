@@ -65,7 +65,6 @@ public class Door : MonoBehaviour
         if (!_onlyOpen && _isOpen)
         {
             _isOpen = false;
-            
             while (transform.position.y < _startPos.y)
             {
                 transform.position += transform.up * (_speed * Time.deltaTime);

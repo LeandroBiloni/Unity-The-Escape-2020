@@ -77,11 +77,9 @@ public class AlarmGuard : BaseEnemy
         base.OnCollisionEnter(other);
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            _animator.SetTrigger("Punch");
             other.gameObject.GetComponent<Character>().Dead();
             _navMeshAgent.isStopped = true;
-            _animator.SetTrigger("Punch");
-            
-            //TODO: derrota
         }
     }
 }

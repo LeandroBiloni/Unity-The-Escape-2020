@@ -235,9 +235,7 @@ public class Boy : Character
     /// </summary>
     void NextTarget()
     {
-        Debug.Log("next");
-        
-        _targetObjectIndex--;
+       _targetObjectIndex--;
         if (_targetObjectIndex < 0)
         {
             _targetObjectIndex = _fieldOfView.visibleTargets.Count-1;
@@ -251,8 +249,6 @@ public class Boy : Character
     /// </summary>
     void PreviousTarget()
     {
-        Debug.Log("previous");
-        
         _targetObjectIndex++;
         if (_targetObjectIndex == _fieldOfView.visibleTargets.Count)
         {
