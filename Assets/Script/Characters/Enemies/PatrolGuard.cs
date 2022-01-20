@@ -4,7 +4,13 @@ using UnityEngine;
 public class PatrolGuard : BaseEnemy
 {
     private bool _isChasing;
-    [SerializeField] private KeyCode _talkKey;
+    [SerializeField] private GameObject _textCloud;
+    
+    protected override void Start()
+    {
+        base.Start();
+        _textCloud.SetActive(false);
+    }
     // Update is called once per frame
     protected override void Update()
     {
@@ -63,12 +69,14 @@ public class PatrolGuard : BaseEnemy
 
     public void StartTalk()
     {
+        _textCloud.SetActive(true);
         StartCoroutine(TalkTimer());
     }
 
     IEnumerator TalkTimer()
     {
         yield return new WaitForSeconds(_talkTime);
+        _textCloud.SetActive(false);
         _isTalking = false;
         _navMeshAgent.isStopped = false;
         _fieldOfView.viewMeshFilter.gameObject.SetActive(true);

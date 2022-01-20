@@ -23,6 +23,7 @@ public class Switches : MonoBehaviour
 
 	private void Awake()
 	{
+		_meshRenderer = GetComponent<MeshRenderer>();
 		_meshRenderer.material.color = Color.red;
 		_canInteract = true;
 		

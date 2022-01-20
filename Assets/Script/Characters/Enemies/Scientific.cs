@@ -5,6 +5,7 @@ using UnityEngine;
 public class Scientific : BaseEnemy
 {
     [SerializeField] private KeyCode _talkKey;
+    [SerializeField] private GameObject _textCloud;
     [SerializeField] private AlarmComputer _alarm;
     [SerializeField] private Transform _hideSpot; //Para que no active la alarma a cada rato
     private bool _isScared;
@@ -19,6 +20,7 @@ public class Scientific : BaseEnemy
     {
         base.Start();
         _canBeControlled = true;
+        _textCloud.SetActive(false);
     }
 
     // Update is called once per frame
@@ -171,13 +173,11 @@ public class Scientific : BaseEnemy
     {
         while (_navMeshAgent.remainingDistance >= 1)
         {
+            _animator.SetFloat("VelZ", _navMeshAgent.remainingDistance);
             yield return new WaitForEndOfFrame();
         }
-        
         _animator.SetFloat("VelZ", 0);
-        
-        //GetComponent<Rigidbody>().velocity = Vector3.zero;
-        
+        _textCloud.SetActive(true);
         _navMeshAgent.isStopped = true;
         _navMeshAgent.SetDestination(transform.position);
         _guardInFOV.StartTalk();
@@ -188,5 +188,6 @@ public class Scientific : BaseEnemy
         _navMeshAgent.isStopped = false;
         _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
         _fieldOfView.enabled = true;
+        _textCloud.SetActive(false);
     }
 }
