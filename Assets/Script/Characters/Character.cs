@@ -24,16 +24,8 @@ public class Character : MonoBehaviour
         _fieldOfView = GetComponent<FieldOfView>();
 
         var cinematic = FindObjectOfType<Cinematic>();
-        cinematic.OnCinematicStart += () =>
-        {
-            _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
-            _fieldOfView.enabled = false;
-        };
-        cinematic.OnCinematicEnd += () =>
-        {
-            _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
-            _fieldOfView.enabled = true;
-        };
+        cinematic.OnCinematicStart += FieldOfViewOff;
+        cinematic.OnCinematicEnd += FieldOfViewOn;
         _selectionIcon.SetActive(false);
         _animator = GetComponent<Animator>();
         _canMove = true;
@@ -142,5 +134,17 @@ public class Character : MonoBehaviour
         {
             _speed = _moveSpeed;
         }
+    }
+
+    protected void FieldOfViewOn()
+    {
+        _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
+        _fieldOfView.enabled = true;
+    }
+
+    protected void FieldOfViewOff()
+    {
+        _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
+        _fieldOfView.enabled = false;
     }
 }

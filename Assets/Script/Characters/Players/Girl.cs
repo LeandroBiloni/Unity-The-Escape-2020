@@ -41,24 +41,33 @@ public class Girl : Character
         
         CheckEnemyInFOV();
 
-        if (!_inCooldown && Input.GetKeyDown(_controlEnemyKey))
+        if (!_inCooldown && _selectedEnemy)
         {
-	        if (_selectedEnemy && !_controllingEnemy)
-		        ControlEnemy();
+	        if (Input.GetKeyDown(_controlEnemyKey))
+	        {
+	        
+		        if (!_controllingEnemy)
+			        ControlEnemy();
+		        else if (_controllingEnemy)
+			        CancelEnemyControl();
+	        }
 
-	        else if (_controllingEnemy)
-		        CancelEnemyControl();
+	        if (Input.GetKeyDown(_nextTargetKey))
+	        {
+		        Blind();
+	        }
         }
+        
 	        
 
-        if (_canControlEnemy && _enemyInFOV && !_controllingEnemy)
-        {
-	        if (Input.GetKeyDown(_nextTargetKey))
-		        NextTarget();
-        
-	        if (Input.GetKeyDown(_previousTargetKey))
-		        PreviousTarget(); 
-        }
+        // if (_canControlEnemy && _enemyInFOV && !_controllingEnemy)
+        // {
+	       //  if (Input.GetKeyDown(_nextTargetKey))
+		      //   NextTarget();
+        //
+	       //  if (Input.GetKeyDown(_previousTargetKey))
+		      //   PreviousTarget(); 
+        // }
     }
     
     public override void Select()
@@ -125,7 +134,7 @@ public class Girl : Character
 
     void StartCooldown()
     {
-	    StartCoroutine(ControlCooldown());
+	    StartCoroutine(AbilityCooldown());
     }
 
     IEnumerator ControlTimer()
@@ -147,9 +156,8 @@ public class Girl : Character
 	    CancelEnemyControl();
     }
 
-    IEnumerator ControlCooldown()
+    IEnumerator AbilityCooldown()
     {
-	    
 	    float time = 0;
 
 	    while (time < _controlCooldown)
@@ -166,7 +174,20 @@ public class Girl : Character
 	    _inCooldown = false;
 	    _canControlEnemy = true;
 	    OnTimerRunning?.Invoke(1);
-	    
+    }
+
+    private void Blind()
+    {
+	    if (_inCooldown) return;
+
+	    if (_selectedEnemy)
+	    {
+		    _selectedEnemy.Blind(_controlCooldown);
+		    _animator.SetTrigger("Poder");
+		    _canControlEnemy = false;
+		    _inCooldown = true;
+		    StartCooldown();
+	    }
     }
 
     void CheckEnemyInFOV()
@@ -221,30 +242,30 @@ public class Girl : Character
 		}
 	}
     
-    void NextTarget()
-    {
-
-	    _enemyTargetIndex--;
-	    if (_enemyTargetIndex < 0)
-	    {
-		    _enemyTargetIndex = _fieldOfView.visibleTargets.Count-1;
-	    }
-	    var enemy = _fieldOfView.visibleTargets[_enemyTargetIndex].GetComponent<BaseEnemy>();
-	    EnemyInPlayerFOV(_enemyInFOV, enemy);
-	    
-    }
-    
-    void PreviousTarget()
-    {
-
-	    _enemyTargetIndex++;
-	    if (_enemyTargetIndex == _fieldOfView.visibleTargets.Count)
-	    {
-		    _enemyTargetIndex = 0;
-	    }
-	    var enemy = _fieldOfView.visibleTargets[_enemyTargetIndex].GetComponent<BaseEnemy>();
-	    EnemyInPlayerFOV(_enemyInFOV, enemy);
-    }
+    // void NextTarget()
+    // {
+    //
+	   //  _enemyTargetIndex--;
+	   //  if (_enemyTargetIndex < 0)
+	   //  {
+		  //   _enemyTargetIndex = _fieldOfView.visibleTargets.Count-1;
+	   //  }
+	   //  var enemy = _fieldOfView.visibleTargets[_enemyTargetIndex].GetComponent<BaseEnemy>();
+	   //  EnemyInPlayerFOV(_enemyInFOV, enemy);
+	   //  
+    // }
+    //
+    // void PreviousTarget()
+    // {
+    //
+	   //  _enemyTargetIndex++;
+	   //  if (_enemyTargetIndex == _fieldOfView.visibleTargets.Count)
+	   //  {
+		  //   _enemyTargetIndex = 0;
+	   //  }
+	   //  var enemy = _fieldOfView.visibleTargets[_enemyTargetIndex].GetComponent<BaseEnemy>();
+	   //  EnemyInPlayerFOV(_enemyInFOV, enemy);
+    // }
 
     public override void Dead()
     {
