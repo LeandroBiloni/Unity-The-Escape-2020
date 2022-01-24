@@ -9,11 +9,20 @@ public class Boy : Character
     [SerializeField] private KeyCode _throwObjectKey;
     [SerializeField] private KeyCode _nextTargetKey;
     [SerializeField] private KeyCode _previousTargetKey;
+    [SerializeField] private KeyCode _knockBackKey;
     
     [Header("Ability")]
     [SerializeField] private Transform _powerPoint;
     [SerializeField] private float _telekinesisCooldown;
     [SerializeField] private float _attractionForce;
+    [SerializeField] private float _knockBackRadius;
+    [SerializeField] private float _knockBackForce;
+    [SerializeField] private float _knockBackStunDuration;
+
+    [Header("Sounds")]
+    [SerializeField] private AudioClip _throwBoxSfx;
+    [SerializeField] private AudioClip _pullBoxSfx;
+
     private bool _objectsInFov;
     private Transform _currentObject;
     private int _targetObjectIndex = 0;
@@ -69,7 +78,10 @@ public class Boy : Character
                 PreviousTarget();
         }
 
-        
+        if (Input.GetKeyDown(_knockBackKey) && !_holdingObject && _canUsePower)
+        {
+            KnockBack();
+        }
     }
     
     public override void Select()
@@ -95,6 +107,7 @@ public class Boy : Character
         _pulling = true;
         //TODO: Agregar el sonido
         //manager.audioManager.PlaySFX(pullBoxSound);
+        _audioManager.PlaySFX(_pullBoxSfx);
         _animator.SetTrigger("poder");
         
         _canUsePower = false;
@@ -139,6 +152,7 @@ public class Boy : Character
     {
         //TODO: Agregar el sonido
         //manager.audioManager.PlaySFX(throwBoxSound, .5f);
+        _audioManager.PlaySFX(_throwBoxSfx);
         _animator.SetTrigger("poder");
 		
         _holdingObject = false;
@@ -152,7 +166,7 @@ public class Boy : Character
         objRb.constraints = RigidbodyConstraints.None;
         objRb.AddForce(_powerPoint.forward * 10f, ForceMode.VelocityChange);  //Lanza el objeto hacia donde esta mirando
 
-        StartCoroutine(TelekinesisCooldown());
+        StartCoroutine(TelekinesisCooldown(false));
     }
 
     /// <summary>
@@ -168,14 +182,41 @@ public class Boy : Character
         objRb.constraints = RigidbodyConstraints.None;
         _holdingObject = false;
         
-        StartCoroutine(TelekinesisCooldown());
+        StartCoroutine(TelekinesisCooldown(false));
     }
 
-    IEnumerator TelekinesisCooldown()
+    IEnumerator TelekinesisCooldown(bool maxCooldown)
     {
-        yield return new WaitForSeconds(_telekinesisCooldown);
+        if (!maxCooldown)
+            yield return new WaitForSeconds(_telekinesisCooldown);
+        else
+            yield return new WaitForSeconds(_telekinesisCooldown * 4);
 
         _canUsePower = true;
+    }
+
+    /// <summary>
+    /// Knocks back every nearby enemy and stuns them for a second
+    /// </summary>
+    private void KnockBack()
+    {
+        //FALTA AGREGAR EN EL HUD EL COOLDOWN DEL USO DE PODER 
+        //Agregar sonido, animación y efecto(?
+
+        _canUsePower = false;
+        _canMove = false;
+
+        var enemyTargets = Physics.OverlapSphere(transform.position, _knockBackRadius);
+        Debug.Log("List Size: " + enemyTargets.Length);
+        foreach (var item in enemyTargets)
+        {
+            var currentEnemy = item.GetComponent<BaseEnemy>();
+            if (!currentEnemy) continue;
+            Debug.Log(currentEnemy.name + "Knock Back");
+            currentEnemy.GetKnockedBack((currentEnemy.transform.position - transform.position) * _knockBackForce, _knockBackStunDuration);
+        }
+        StartCoroutine(TelekinesisCooldown(true));
+        _canMove = true;
     }
 
     void CheckObjectInFOV()

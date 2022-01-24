@@ -1740,9 +1740,18 @@ MonoBehaviour:
   _throwObjectKey: 101
   _nextTargetKey: 101
   _previousTargetKey: 113
+  _knockBackKey: 114
   _powerPoint: {fileID: 6744586579552538576}
   _telekinesisCooldown: 0.5
   _attractionForce: 10
+  _knockBackRadius: 5
+  _knockBackForce: 500
+  _knockBackStunDuration: 1
+  _knockBackLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  _throwBoxSfx: {fileID: 8300000, guid: 7608cca404f3a02419835edabe3fdcf9, type: 3}
+  _pullBoxSfx: {fileID: 8300000, guid: b227296f077554844acfe07b84c42103, type: 3}
 --- !u!136 &2188645097967248387
 CapsuleCollider:
   m_ObjectHideFlags: 0
