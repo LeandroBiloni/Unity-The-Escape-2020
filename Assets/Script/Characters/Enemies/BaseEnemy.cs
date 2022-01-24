@@ -226,4 +226,34 @@ public class BaseEnemy : Character
         _particle.Stop(false,ParticleSystemStopBehavior.StopEmitting);
         _particle.gameObject.SetActive(false);
     }
+
+    public void GetKnockedBack(Vector3 dir, float stunDuration)
+    {
+        FieldOfViewOff();
+        _navMeshAgent.isStopped = true;
+        _animator.SetFloat("VelZ", 0);
+        _particle.gameObject.SetActive(true);
+        _particle.Play();
+
+        var rb = GetComponent<Rigidbody>();
+        if (rb) rb.AddForce(dir, ForceMode.Acceleration);
+
+        StartCoroutine(KnockBackTimer(stunDuration));
+    }
+
+    IEnumerator KnockBackTimer(float stunDuration)
+    {
+        float time = 0f;
+
+        while (time < stunDuration)
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        FieldOfViewOn();
+        _navMeshAgent.isStopped = false;
+        _particle.Stop(false, ParticleSystemStopBehavior.StopEmitting);
+        _particle.gameObject.SetActive(false);
+    }
 }

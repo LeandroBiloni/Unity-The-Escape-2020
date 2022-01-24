@@ -17,7 +17,9 @@ public class Character : MonoBehaviour
     [SerializeField] protected float _iconShowTime;
     
     protected FieldOfView _fieldOfView;
-    
+
+    protected AudioManager _audioManager;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -31,6 +33,7 @@ public class Character : MonoBehaviour
         _canMove = true;
         _selectionIcon.SetActive(false);
         _speed = _moveSpeed;
+        _audioManager = FindObjectOfType<AudioManager>();
     }
 
     // Update is called once per frame
@@ -71,6 +74,7 @@ public class Character : MonoBehaviour
 
         //TODO: Agregar sonido.
         //audMan.WalkingSound(dir);
+        _audioManager.WalkingSound(dir);
     }
 
     public bool IsSelected()
