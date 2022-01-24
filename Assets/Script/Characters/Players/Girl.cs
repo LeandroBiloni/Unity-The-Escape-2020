@@ -215,7 +215,7 @@ public class Girl : Character
 			if (_selectedEnemy == null)
 			{
 				
-				if (selectedEnemy && selectedEnemy.CanBeControlled())
+				if (selectedEnemy && (selectedEnemy.CanBeControlled() || !selectedEnemy.IsBlinded() || !selectedEnemy.IsTalking()))
 				{
 					_selectedEnemy = selectedEnemy;
 					selectedEnemy.UnitInPlayerFOV();

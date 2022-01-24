@@ -9,8 +9,10 @@ public class BaseEnemy : Character
     [SerializeField] protected ParticleSystem _particle;
     
     [SerializeField] protected GameObject _interactionIcon;
+    [SerializeField] protected GameObject _blindIcon;
     [SerializeField] protected float _talkTime;
     protected bool _canBeControlled;
+    protected bool _isBlinded;
     protected bool _isTalking;
     protected int _waypointsIndex;
 
@@ -51,12 +53,23 @@ public class BaseEnemy : Character
     public void UnitInPlayerFOV()
     {
         if (!_selected)
-            _interactionIcon.SetActive(true);
+        {
+            if (_canBeControlled)
+                _interactionIcon.SetActive(true);
+            
+            if (!_isBlinded)
+                _blindIcon.SetActive(true);
+        }
+            
     }
 
     public void UnitOutOfPlayerFOV()
     {
-        _interactionIcon.SetActive(false);
+        if (_interactionIcon)
+            _interactionIcon.SetActive(false);
+        
+        if (_blindIcon)
+            _blindIcon.SetActive(false);
     }
 
     public override void Select()
@@ -207,13 +220,26 @@ public class BaseEnemy : Character
         return _canBeControlled;
     }
 
+    public bool IsBlinded()
+    {
+        return _isBlinded;
+    }
+
+    public bool IsTalking()
+    {
+        return _isTalking;
+    }
+
     public void Blind(float duration)
     {
         FieldOfViewOff();
         _navMeshAgent.isStopped = true;
         _animator.SetFloat("VelZ", 0);
+        _animator.SetBool("Dizzy", true);
         _particle.gameObject.SetActive(true);
         _particle.Play();
+        _canBeControlled = false;
+        _isBlinded = true;
         StartCoroutine(BlindTimer(duration));
     }
 
@@ -221,7 +247,10 @@ public class BaseEnemy : Character
     {
         yield return new WaitForSeconds(time);
         
+        _animator.SetBool("Dizzy", false);
         FieldOfViewOn();
+        _canBeControlled = true;
+        _isBlinded = false;
         _navMeshAgent.isStopped = false;
         _particle.Stop(false,ParticleSystemStopBehavior.StopEmitting);
         _particle.gameObject.SetActive(false);

@@ -50,12 +50,14 @@ public class PatrolGuard : BaseEnemy
 
     public void InScientificFOV()
     {
-        _interactionIcon.SetActive(true);
+        if (_interactionIcon)
+            _interactionIcon.SetActive(true);
     }
 
     public void OutOfScientificFOV()
     {
-        _interactionIcon.SetActive(false);
+        if (_interactionIcon)
+            _interactionIcon.SetActive(false);
     }
 
     public void StopToTalk()
