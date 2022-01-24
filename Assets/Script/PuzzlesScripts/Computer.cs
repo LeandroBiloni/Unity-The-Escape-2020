@@ -39,6 +39,7 @@ public class Computer : MonoBehaviour
 
         if (_platform && _platform.IsInteractable())
         {
+            Debug.Log("computar platform");
             _platform.StartMovement();
         } 
         

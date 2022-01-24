@@ -52,7 +52,7 @@ public class Girl : Character
 			        CancelEnemyControl();
 	        }
 
-	        if (Input.GetKeyDown(_nextTargetKey))
+	        if (Input.GetKeyDown(_nextTargetKey) && !_controllingEnemy)
 	        {
 		        Blind();
 	        }

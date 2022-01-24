@@ -43,25 +43,21 @@ public class MovingPlatformButton : MonoBehaviour
 
 	void MoveRight()
 	{
-		Debug.Log("right");
 		_platform.transform.position += _platform.transform.right * (_speed * Time.deltaTime);;
 	}
 
 	void MoveLeft()
 	{
-		Debug.Log("left");
 		_platform.transform.position -= _platform.transform.right * (_speed * Time.deltaTime);;
 	}
 
 	void MoveForward()
 	{
-		Debug.Log("forward");
 		_platform.transform.position += _platform.transform.forward * (_speed * Time.deltaTime);
 	}
 
 	void MoveBackward()
 	{
-		Debug.Log("backward");
 		_platform.transform.position -= _platform.transform.forward * (_speed * Time.deltaTime);
 	}
 	

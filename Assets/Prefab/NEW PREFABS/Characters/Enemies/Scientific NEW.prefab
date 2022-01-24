@@ -1203,7 +1203,7 @@ MonoBehaviour:
   _waypoints: []
   _particle: {fileID: 2304797950634524636}
   _interactionIcon: {fileID: 2642665048614951850}
-  _blindIcon: {fileID: 0}
+  _blindIcon: {fileID: 2212844834519186394}
   _talkTime: 5
   _talkKey: 101
   _textCloud: {fileID: 3970052296714133171}
@@ -7381,6 +7381,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Selection Arrow
       objectReference: {fileID: 0}
+    - target: {fileID: 1848396555222585994, guid: 27db2beb32d718d49a7e36786df3a820,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3673129995841980237, guid: 27db2beb32d718d49a7e36786df3a820,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7506,6 +7511,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Text Cloud A
+      objectReference: {fileID: 0}
+    - target: {fileID: 6350197620525351345, guid: 12856ba9d2f99574887fa6e29d79eddf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9175268271689486704, guid: 12856ba9d2f99574887fa6e29d79eddf,
         type: 3}

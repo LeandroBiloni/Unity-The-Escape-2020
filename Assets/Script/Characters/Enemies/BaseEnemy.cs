@@ -78,7 +78,7 @@ public class BaseEnemy : Character
         _canMove = true;
         _navMeshAgent.isStopped = true;
         StopCoroutine(RotateTowards(Vector3.zero,false));
-        _interactionIcon.SetActive(false);
+        UnitOutOfPlayerFOV();
         if (_particle)
         {
             _particle.gameObject.SetActive(true);
@@ -236,6 +236,7 @@ public class BaseEnemy : Character
         _navMeshAgent.isStopped = true;
         _animator.SetFloat("VelZ", 0);
         _animator.SetBool("Dizzy", true);
+        UnitOutOfPlayerFOV();
         _particle.gameObject.SetActive(true);
         _particle.Play();
         _canBeControlled = false;
