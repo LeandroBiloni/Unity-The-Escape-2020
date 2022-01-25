@@ -59,10 +59,18 @@ public class Cinematic : MonoBehaviour
     IEnumerator FinishCut()
     {
 	    OnCinematicStart?.Invoke();
-        yield return new WaitForSeconds(Wait);
-		thePlayer.gameObject.SetActive(false);
-        cutSceneCam.gameObject.SetActive(true);
+	    thePlayer.gameObject.SetActive(false);
+	    yield return new WaitForSeconds(Wait);
+        cutSceneCam.gameObject.SetActive(false);
+        
         finalCam.gameObject.SetActive(true);
+        
+        var multipleCamera = finalCam.GetComponent<CameraMultipleTargets>();
+        var girl = FindObjectOfType<Girl>().transform;
+        var boy = FindObjectOfType<Boy>().transform;
+        multipleCamera.AddTarget(girl);
+        multipleCamera.AddTarget(boy);
+        
         finalCam = Camera.main;
         OnCinematicEnd?.Invoke();
     }

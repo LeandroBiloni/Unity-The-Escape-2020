@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMultipleTargets : MonoBehaviour
 {
-    public List<Transform> targets;
+    private List<Transform> _targets;
     public Vector3 offset;
     private Vector3 velocity;
     public float smoothTime;
@@ -13,6 +14,7 @@ public class CameraMultipleTargets : MonoBehaviour
     public float zoomLimit;
 
     private Camera cam;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +23,7 @@ public class CameraMultipleTargets : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (targets.Count == 0)
+        if (_targets.Count == 0)
         {
             return;
         }
@@ -45,26 +47,35 @@ public class CameraMultipleTargets : MonoBehaviour
 
     private float GreatestDistance()
     {
-        var bounds = new Bounds(targets[0].position, Vector3.zero);
-        for (int i = 0; i < targets.Count; i++)
+        var bounds = new Bounds(_targets[0].position, Vector3.zero);
+        for (int i = 0; i < _targets.Count; i++)
         {
-            bounds.Encapsulate(targets[i].position);
-        }
-        return bounds.size.x;
-    }
-    private Vector3 GetCenterPoint()
-    {
-        if (targets.Count == 1)
-        {
-            return targets[0].position;
+            bounds.Encapsulate(_targets[i].position);
         }
 
-        var bounds = new Bounds(targets[0].position, Vector3.zero);
-        for(int i = 0; i < targets.Count; i++)
+        return bounds.size.x;
+    }
+
+    private Vector3 GetCenterPoint()
+    {
+        if (_targets.Count == 1)
         {
-            bounds.Encapsulate(targets[i].position);
+            return _targets[0].position;
+        }
+
+        var bounds = new Bounds(_targets[0].position, Vector3.zero);
+        for (int i = 0; i < _targets.Count; i++)
+        {
+            bounds.Encapsulate(_targets[i].position);
         }
 
         return bounds.center;
+    }
+
+    public void AddTarget(Transform t)
+    {
+        if (_targets == null) _targets = new List<Transform>();
+        
+        _targets.Add(t);
     }
 }

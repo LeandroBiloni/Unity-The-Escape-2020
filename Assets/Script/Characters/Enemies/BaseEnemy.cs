@@ -41,6 +41,8 @@ public class BaseEnemy : Character
     {
         base.Update();
 
+        if (_isBlinded) return;
+        
         if (_isTalking)
         {
             _interactionIcon.SetActive(false);
@@ -54,10 +56,10 @@ public class BaseEnemy : Character
     {
         if (!_selected)
         {
-            if (_canBeControlled)
+            if (_canBeControlled && _interactionIcon)
                 _interactionIcon.SetActive(true);
             
-            if (!_isBlinded)
+            if (!_isBlinded && _blindIcon)
                 _blindIcon.SetActive(true);
         }
             
@@ -153,6 +155,8 @@ public class BaseEnemy : Character
     
     protected void CheckWaypointDistance()
     {
+        
+        
         var distance = Vector3.Distance(_navMeshAgent.destination, transform.position);
         _animator.SetFloat("VelZ", distance);
         if (distance <= _navMeshAgent.stoppingDistance)
@@ -189,6 +193,8 @@ public class BaseEnemy : Character
         {
             if (!ignorePlayer && _playerInFOV) break;
 
+            if (_isBlinded || _isTalking) break;
+
             transform.rotation = Quaternion.Slerp(transform.rotation, rotTarget, time);
             time += Time.deltaTime;
             angle = Vector3.Angle(transform.forward, dir);
@@ -196,7 +202,8 @@ public class BaseEnemy : Character
             yield return new WaitForEndOfFrame();
         }
 
-        _navMeshAgent.isStopped = false;
+        if (!_isBlinded && !_isTalking  && !_selected)
+            _navMeshAgent.isStopped = false;
     }
     
     protected virtual void OnDrawGizmosSelected()
@@ -244,7 +251,7 @@ public class BaseEnemy : Character
         StartCoroutine(BlindTimer(duration));
     }
 
-    IEnumerator BlindTimer(float time)
+    protected IEnumerator BlindTimer(float time)
     {
         yield return new WaitForSeconds(time);
         

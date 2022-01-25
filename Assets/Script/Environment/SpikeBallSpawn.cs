@@ -33,7 +33,8 @@ public class SpikeBallSpawn : MonoBehaviour
     IEnumerator SpawnSpikeBall()
 	{
         yield return new WaitForSeconds(maxTime);
-        pool.GetObject();
+        var spikeBall = pool.GetObject();
+        spikeBall.transform.localPosition = Vector3.zero;
         StartCoroutine(SpawnSpikeBall());
 	}
 }

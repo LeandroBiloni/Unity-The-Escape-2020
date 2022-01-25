@@ -34,6 +34,6 @@ public class SpikeBall : MonoBehaviour
     public static void Turnoff(SpikeBall spikeBall)
 	{
         spikeBall.gameObject.SetActive(false);
-
+        
     }
 }

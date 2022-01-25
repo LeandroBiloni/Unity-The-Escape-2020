@@ -27,6 +27,9 @@ public class PatrolGuard : BaseEnemy
             CheckWaypointDistance(); 
         }
         else PlayerChase();
+
+        if (_canBeControlled)
+            _canBeControlled = false;
     }
     
     private void PlayerChase()
