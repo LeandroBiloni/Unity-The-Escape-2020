@@ -638,7 +638,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 0}
   _door: {fileID: 0}
-  _rotateAmount: 1
+  _rotateAmount: 2
+  _targetInFov: 0
+  _moving: 0
+  _targetRotation: {x: 0, y: 90, z: 0}
 --- !u!1 &7210541673027421234
 GameObject:
   m_ObjectHideFlags: 0

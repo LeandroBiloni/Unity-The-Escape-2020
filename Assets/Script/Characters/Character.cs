@@ -19,6 +19,8 @@ public class Character : MonoBehaviour
     protected FieldOfView _fieldOfView;
 
     protected AudioManager _audioManager;
+    
+    protected Rigidbody _rb;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -34,6 +36,7 @@ public class Character : MonoBehaviour
         _selectionIcon.SetActive(false);
         _speed = _moveSpeed;
         _audioManager = FindObjectOfType<AudioManager>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -71,6 +74,9 @@ public class Character : MonoBehaviour
         //transform.position += dir.normalized * (_moveSpeed * Time.deltaTime);
         transform.rotation = Quaternion.LookRotation(dir);
         transform.position += dir * (Time.deltaTime * _speed);
+        /*var tempVector = dir;
+        tempVector = tempVector.normalized * _speed * Time.deltaTime;
+        _rb.MovePosition(transform.position + tempVector);*/
 
         //TODO: Agregar sonido.
         //audMan.WalkingSound(dir);

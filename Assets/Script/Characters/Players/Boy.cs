@@ -18,6 +18,7 @@ public class Boy : Character
     [SerializeField] private float _knockBackRadius;
     [SerializeField] private float _knockBackForce;
     [SerializeField] private float _knockBackStunDuration;
+    [SerializeField] private BoyBlastPower _knockBackSphere;
 
     [Header("Sounds")]
     [SerializeField] private AudioClip _throwBoxSfx;
@@ -109,7 +110,7 @@ public class Boy : Character
         //TODO: Agregar el sonido
         //manager.audioManager.PlaySFX(pullBoxSound);
         _audioManager.PlaySFX(_pullBoxSfx);
-        _animator.SetTrigger("poder");
+        _animator.SetTrigger("Power");
         
         _canUsePower = false;
         _canMove = false;
@@ -154,7 +155,7 @@ public class Boy : Character
         //TODO: Agregar el sonido
         //manager.audioManager.PlaySFX(throwBoxSound, .5f);
         _audioManager.PlaySFX(_throwBoxSfx, .5f);
-        _animator.SetTrigger("poder");
+        _animator.SetTrigger("Power");
 		
         _holdingObject = false;
         
@@ -188,7 +189,9 @@ public class Boy : Character
 
     IEnumerator TelekinesisCooldown(bool maxCooldown)
     {
-        if(!maxCooldown)
+        _canMove = true;
+
+        if (!maxCooldown)
             yield return new WaitForSeconds(_telekinesisCooldown);
         else
             yield return new WaitForSeconds(_telekinesisCooldown * 4);
@@ -203,6 +206,8 @@ public class Boy : Character
     {
         //FALTA AGREGAR EN EL HUD EL COOLDOWN DEL USO DE PODER 
         //Agregar sonido, animación y efecto(?
+        //_animator.SetTrigger("Blast");
+        _knockBackSphere.BlastStart();
 
         _canUsePower = false;
         _canMove = false;
@@ -217,7 +222,6 @@ public class Boy : Character
             currentEnemy.GetKnockedBack((currentEnemy.transform.position - transform.position) * _knockBackForce, _knockBackStunDuration);
         }
         StartCoroutine(TelekinesisCooldown(true));
-        _canMove = true;
     }
 
     void CheckObjectInFOV()

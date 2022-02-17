@@ -776,11 +776,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84dafab1b4cecec4697a0f3b61829fa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotate_amount: 1
-  targetInFov: 0
-  _manager: {fileID: 0}
-  spawn: {fileID: 0}
-  door: {fileID: 0}
+  _spawnPoint: {fileID: 0}
+  _door: {fileID: 0}
+  _rotateAmount: 0
+  _targetInFov: 0
+  _moving: 0
+  _targetRotation: {x: 0, y: 90, z: 0}
 --- !u!1 &6031869087097175792
 GameObject:
   m_ObjectHideFlags: 0
