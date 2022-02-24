@@ -64,13 +64,15 @@ public class MovingPlatformButton : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy")
+			|| other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
 			_activated = true;
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy")
+			|| other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
 			_activated = false;
 	}
 }

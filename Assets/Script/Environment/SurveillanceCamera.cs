@@ -43,8 +43,8 @@ public class SurveillanceCamera : MonoBehaviour
 		if (_targetInFov)
 		{
 			StopAllCoroutines();
-			FollowTarget();
-			
+			//FollowTarget();
+			_moving = false;
 			if (!_alarmActivated)
 				TriggerAlarm();
 			return;
@@ -53,13 +53,8 @@ public class SurveillanceCamera : MonoBehaviour
 		if (!_moving && !_targetInFov)
 		{
 			ResetPosition();
+			StartCoroutine(CameraRotation(Quaternion.Euler(_targetRotation)));
 		}
-	}
-
-	private void Rotate()
-	{
-		//transform.rotation = Quaternion.Euler(transform.eulerAngles.x, (Mathf.Sin(Time.realtimeSinceStartup) * _rotateAmount) + transform.eulerAngles.y, transform.eulerAngles.z);
-		StartCoroutine(CameraRotation(Quaternion.Euler(_targetRotation)));
 	}
 
 	IEnumerator CameraRotation(Quaternion endValue)
@@ -107,7 +102,6 @@ public class SurveillanceCamera : MonoBehaviour
 		_moving = true;
 		transform.position = _startPosition;
 		transform.rotation = _startRotation;
-		StartCoroutine(CameraRotation(Quaternion.Euler(_targetRotation)));
 	}
 
 	private void CheckFov()

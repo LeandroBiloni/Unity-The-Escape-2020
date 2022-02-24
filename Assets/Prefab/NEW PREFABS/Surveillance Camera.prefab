@@ -641,6 +641,7 @@ MonoBehaviour:
   _rotateAmount: 2
   _targetInFov: 0
   _moving: 0
+  _rotationSpeed: 3.5
   _targetRotation: {x: 0, y: 90, z: 0}
 --- !u!1 &7210541673027421234
 GameObject:
