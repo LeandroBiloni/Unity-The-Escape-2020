@@ -11,6 +11,7 @@ public class MovingPlatformButton : MonoBehaviour
 	[SerializeField] private bool _moveForward;
 	[SerializeField] private bool _moveBackward;
 	[SerializeField] private float _speed = 1f;
+	[SerializeField] private List<Cable> _cables = new List<Cable>();
 	private bool _activated;
 
 	private MeshRenderer _meshRenderer;
@@ -64,15 +65,43 @@ public class MovingPlatformButton : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy")
-			|| other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
+		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer ==
+		                                                              LayerMask.NameToLayer("Enemy")
+		                                                              || other.gameObject.layer ==
+		                                                              LayerMask.NameToLayer("MovableObjects"))
+		{
 			_activated = true;
+			CablesOn();
+		}
+			
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy")
-			|| other.gameObject.layer == LayerMask.NameToLayer("MovableObjects"))
+		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer ==
+		                                                              LayerMask.NameToLayer("Enemy")
+		                                                              || other.gameObject.layer ==
+		                                                              LayerMask.NameToLayer("MovableObjects"))
+		{
 			_activated = false;
+			CablesOff();
+		}
+			
+	}
+	
+	private void CablesOn()
+	{
+		foreach (var cable in _cables)
+		{
+			cable.Activate();
+		}
+	}
+
+	private void CablesOff()
+	{
+		foreach (var cable in _cables)
+		{
+			cable.Deactivate();
+		}
 	}
 }

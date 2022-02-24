@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Beta.unity
     guid: 808d6ca781e475e4aa7d5313cf252d78
   - enabled: 1
+    path: Assets/Scenes/Gamma.unity
+    guid: cc837446ae787e545a6363fb3dbad4c5
+  - enabled: 1
     path: Assets/Scenes/Escenas/LoadScreen.unity
     guid: c8fa48d89fb267f47a4a1198c0143de7
   m_configObjects: {}
