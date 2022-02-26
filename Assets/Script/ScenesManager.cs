@@ -12,14 +12,14 @@ public class ScenesManager : MonoBehaviour
         _sceneName = SceneManager.GetActiveScene().name;
         _memory = FindObjectOfType<Memory>();
 
-        if (_sceneName == "Beta") //CUANDO HAYA MAS NIVELES HAY QUE AGREGARLOS ACA
+        if (_sceneName == "Beta" || _sceneName == "Gamma") //CUANDO HAYA MAS NIVELES HAY QUE AGREGARLOS ACA
             _memory.activeLevel = _sceneName;
     }
 
 	//PONER EL NOMBRE DE LA ESCENA EN CADA FUNCION
 	public void Play()
     {
-        _memory.activeLevel = "Beta";
+        _memory.activeLevel = "Gamma";
         SceneManager.LoadScene("LoadScreen"); 
     }
 
@@ -41,6 +41,12 @@ public class ScenesManager : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("Menu");
+    }
+
+    public void LoadNextLevel(string level)
+    {
+        _memory.activeLevel = level;
+        SceneManager.LoadScene("LoadScreen"); 
     }
 
     public void Controls()
