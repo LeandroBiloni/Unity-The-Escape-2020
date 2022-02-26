@@ -24,7 +24,7 @@ public class ChangeLevelZone : MonoBehaviour
     {
         yield return new WaitForSeconds(loadDelay);
         
-        Memory.Instance.OnSceneChange();
-        _scenesManager.LoadNextLevel(nextLevel);
+        Memory.Instance.OnSceneChange(nextLevel);
+        _scenesManager.LoadNextLevel();
     }
 }

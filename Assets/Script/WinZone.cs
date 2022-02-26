@@ -16,7 +16,7 @@ public class WinZone : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Memory.Instance.OnSceneChange();
+            Memory.Instance.OnSceneChange("Win");
             _scenesManager.WinScreen();
         }
     }

@@ -43,9 +43,8 @@ public class ScenesManager : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
-    public void LoadNextLevel(string level)
+    public void LoadNextLevel()
     {
-        _memory.activeLevel = level;
         SceneManager.LoadScene("LoadScreen"); 
     }
 

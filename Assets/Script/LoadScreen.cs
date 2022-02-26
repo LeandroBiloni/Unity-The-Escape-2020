@@ -16,11 +16,13 @@ public class LoadScreen : MonoBehaviour
     public AsyncOperation op;
     public float time;
     public bool called = false;
+
+    private bool _updateStartDelay = true;
     // Start is called before the first frame update
     void Start()
     {
-        memory = FindObjectOfType<Memory>();
-        sceneToLoad = memory.activeLevel;
+        _updateStartDelay = true;
+        StartCoroutine(UpdateStartDelay());
         pressKey.SetActive(false);
         //StartCoroutine(AsynchronousLoad(sceneToLoad));
         //op = SceneManager.LoadSceneAsync(sceneToLoad);
@@ -29,11 +31,16 @@ public class LoadScreen : MonoBehaviour
 
      void Update()
     {
+        if (_updateStartDelay) return;
+        
         time += Time.deltaTime;
         if (time >= 1 && called == false)
         {
-            called = true;
             op = SceneManager.LoadSceneAsync(sceneToLoad);
+            
+            if (op == null) return;
+                
+            called = true;
             op.allowSceneActivation = false;
         }
 
@@ -56,7 +63,7 @@ public class LoadScreen : MonoBehaviour
             }
         }
     }
-IEnumerator AsynchronousLoad(string scene)
+    IEnumerator AsynchronousLoad(string scene)
     {
         yield return null;
 
@@ -80,5 +87,13 @@ IEnumerator AsynchronousLoad(string scene)
 
             yield return null;
         }
+    }
+
+    IEnumerator UpdateStartDelay()
+    {
+        yield return new WaitForSeconds(2);
+        memory = FindObjectOfType<Memory>();
+        sceneToLoad = memory.activeLevel;
+        _updateStartDelay = false;
     }
 }

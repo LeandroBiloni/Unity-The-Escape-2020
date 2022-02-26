@@ -45,9 +45,9 @@ public class Memory : MonoBehaviour
         return _girlPosition;
     }
 
-    public void OnSceneChange()
+    public void OnSceneChange(string nextLevel)
     {
-        activeLevel = "";
+        activeLevel = nextLevel;
         checkpointReached = false;
         _boyPosition = Vector3.zero;
         _girlPosition = Vector3.zero;
