@@ -155,8 +155,8 @@ public class BaseEnemy : Character
     
     protected void CheckWaypointDistance()
     {
-        
-        
+        if (_waypoints.Count <= 0) return;
+
         var distance = Vector3.Distance(_navMeshAgent.destination, transform.position);
         _animator.SetFloat("VelZ", distance);
         if (distance <= _navMeshAgent.stoppingDistance)
