@@ -19,19 +19,37 @@ public class CameraFollow : MonoBehaviour
 
 		var girl = FindObjectOfType<Girl>();
 		girl.OnControlChange += SetTarget;
+
+		if (selector)
+		{
+			var character = selector.GetSelectedCharacter();
+
+			if (character)
+			{
+				_characterToFollow = character.transform;
+			}
+		}
 		
-		_characterToFollow = selector.GetSelectedCharacter().transform;
 	}
 
 	private void LateUpdate()
 	{
-		Vector3 desiredPosition = _characterToFollow.position + offset;
-		Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-		if (follow == true)
+		if (!_characterToFollow)
 		{
-			transform.position = smoothedPosition;
+			var selector = FindObjectOfType<CharacterSelector>();
+			_characterToFollow = selector.GetSelectedCharacter().transform;
 		}
-		else CameraMovement();
+		else
+		{
+			Vector3 desiredPosition = _characterToFollow.position + offset;
+			Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+			if (follow == true)
+			{
+				transform.position = smoothedPosition;
+			}
+			else CameraMovement();
+		}
+		
 	}
 
 	public void CameraMovement()

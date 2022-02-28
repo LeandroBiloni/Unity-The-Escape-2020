@@ -33,7 +33,6 @@ public class Character : MonoBehaviour
         _selectionIcon.SetActive(false);
         _animator = GetComponent<Animator>();
         _canMove = true;
-        _selectionIcon.SetActive(false);
         _speed = _moveSpeed;
         _audioManager = FindObjectOfType<AudioManager>();
         _rb = GetComponent<Rigidbody>();
@@ -146,15 +145,36 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected void FieldOfViewOn()
+    public void FieldOfViewOn()
     {
         _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
         _fieldOfView.enabled = true;
     }
 
-    protected void FieldOfViewOff()
+    public void FieldOfViewOff()
     {
         _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
         _fieldOfView.enabled = false;
+    }
+
+    public void StopMovement()
+    {
+        _canMove = false;
+        _animator.SetFloat("VelZ", 0);
+    }
+
+    public void ResumeMovement()
+    {
+        _canMove = true;
+    }
+
+    public void CancelSelection()
+    {
+        _selected = false;
+    }
+
+    public void ActivateSelection()
+    {
+        _selected = true;
     }
 }

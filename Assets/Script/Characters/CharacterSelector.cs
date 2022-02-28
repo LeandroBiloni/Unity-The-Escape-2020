@@ -29,6 +29,15 @@ public class CharacterSelector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_boy || !_girl)
+        {
+            _boy = FindObjectOfType<Boy>();
+            _girl = FindObjectOfType<Girl>();
+        
+            _boy.Deselect();
+            _girl.Select();
+            _selectedCharacter = _girl.gameObject;
+        }
         if (Input.GetKeyDown(KeyCode.C) && _controllingEnemy == false)
             ChangeCharacter();
     }
