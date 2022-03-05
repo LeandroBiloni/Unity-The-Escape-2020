@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,10 +22,16 @@ public class BaseEnemy : Character
     protected bool _forward;
 
     protected NavMeshAgent _navMeshAgent;
+
+    protected Vector3 _startingPos;
+
+    protected Quaternion _startingRot;
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        _startingPos = transform.position;
+        _startingRot = transform.rotation;
         _navMeshAgent = GetComponent<NavMeshAgent>();
 
         _forward = true;
@@ -155,10 +162,20 @@ public class BaseEnemy : Character
     
     protected void CheckWaypointDistance()
     {
-        if (_waypoints.Count <= 0) return;
-
         var distance = Vector3.Distance(_navMeshAgent.destination, transform.position);
         _animator.SetFloat("VelZ", distance);
+        if (_waypoints.Count <= 0)
+        {
+            _navMeshAgent.SetDestination(_startingPos);
+
+            if (distance <= _navMeshAgent.stoppingDistance)
+            {
+                transform.rotation = _startingRot;
+            }
+
+            return;
+        }
+
         if (distance <= _navMeshAgent.stoppingDistance)
         {
             WaypointSelection();

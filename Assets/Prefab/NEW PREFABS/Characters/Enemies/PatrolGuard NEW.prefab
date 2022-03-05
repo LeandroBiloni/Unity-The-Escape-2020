@@ -1990,6 +1990,7 @@ MonoBehaviour:
   - {fileID: 0}
   _particle: {fileID: 3507913208266148698}
   _interactionIcon: {fileID: 152851060065231001}
+  _blindIcon: {fileID: 152851060065231001}
   _talkTime: 5
   _textCloud: {fileID: 7634581395130213113}
 --- !u!1 &6915985742241124401
