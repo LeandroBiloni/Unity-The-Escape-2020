@@ -15,6 +15,8 @@ public class Memory : MonoBehaviour
     [SerializeField] private Vector3 _boyPosition;
     [SerializeField] private Vector3 _girlPosition;
 
+    private Dictionary<int, bool> _doorsStatus = new Dictionary<int, bool>();
+    
     private void Awake()
     {
         if (Instance == null)
@@ -33,6 +35,15 @@ public class Memory : MonoBehaviour
         _girlPosition = FindObjectOfType<Girl>().transform.position;
 
         checkpointReached = true;
+        
+        var doors = FindObjectsOfType<Door>();
+
+        _doorsStatus.Clear();
+        
+        foreach (var door in doors)
+        {
+            _doorsStatus.Add(door.GetDoorNumber(), door.IsOpen());
+        }
     }
     
     public Vector3 GetBoyPosition()
@@ -45,12 +56,30 @@ public class Memory : MonoBehaviour
         return _girlPosition;
     }
 
+    public void LoadDoors()
+    {
+        StartCoroutine(LoadDoorsDelay());
+    }
+
+    IEnumerator LoadDoorsDelay()
+    {
+        yield return new WaitForEndOfFrame();
+        
+        var newDoors = FindObjectsOfType<Door>();
+        foreach (var door in newDoors)
+        {
+            var doorNumber = door.GetDoorNumber();
+            door.SetOpenOrClosedStatus(_doorsStatus[doorNumber]);
+        }
+    }
+
     public void OnSceneChange(string nextLevel)
     {
         activeLevel = nextLevel;
         checkpointReached = false;
         _boyPosition = Vector3.zero;
         _girlPosition = Vector3.zero;
+        _doorsStatus.Clear();
     }
 
 }

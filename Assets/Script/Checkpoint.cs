@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
+    private void Start()
+    {
+        StartCoroutine(EnablingDelay());
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -19,5 +24,15 @@ public class Checkpoint : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(transform.position, transform.localScale);
+    }
+
+    IEnumerator EnablingDelay()
+    {
+        var collider = GetComponent<BoxCollider>();
+        collider.enabled = false;
+
+        yield return new WaitForSeconds(1);
+
+        collider.enabled = true;
     }
 }

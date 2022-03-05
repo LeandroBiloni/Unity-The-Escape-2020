@@ -997,6 +997,11 @@ PrefabInstance:
       propertyPath: _doorLight
       value: 
       objectReference: {fileID: 1768015647}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6233,6 +6238,11 @@ PrefabInstance:
       propertyPath: _doorLight
       value: 
       objectReference: {fileID: 2066353562}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9323,6 +9333,11 @@ PrefabInstance:
       propertyPath: _doorLight
       value: 
       objectReference: {fileID: 352747908}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15241,7 +15256,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1225, y: 0.21900001}
   m_AnchorMax: {x: 0.8862501, y: 0.7256096}
-  m_AnchoredPosition: {x: -6, y: -6.499649}
+  m_AnchoredPosition: {x: -6, y: -6.4996414}
   m_SizeDelta: {x: 6, y: 13}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &703637197
@@ -20900,6 +20915,11 @@ PrefabInstance:
       propertyPath: _doorLight
       value: 
       objectReference: {fileID: 352747908}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -24702,6 +24722,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door (4) Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -25517,6 +25542,11 @@ PrefabInstance:
       propertyPath: _doorLight
       value: 
       objectReference: {fileID: 229185214}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29999,6 +30029,11 @@ PrefabInstance:
       propertyPath: _doorLight
       value: 
       objectReference: {fileID: 1156200127}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -40432,6 +40467,11 @@ PrefabInstance:
       propertyPath: _doorLight
       value: 
       objectReference: {fileID: 411176011}
+    - target: {fileID: 3412456540176239680, guid: 40d990c6953bb6744a9283a16dcd2598,
+        type: 3}
+      propertyPath: _doorNumber
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7109692666959916648, guid: 40d990c6953bb6744a9283a16dcd2598,
         type: 3}
       propertyPath: m_LocalPosition.x

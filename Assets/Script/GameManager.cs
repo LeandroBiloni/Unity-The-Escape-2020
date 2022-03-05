@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
 
 			var boy = FindObjectOfType<Boy>();
 			boy.transform.position = Memory.Instance.GetBoyPosition();
+			
+			Memory.Instance.LoadDoors();
 		}
 	}
 

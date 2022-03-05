@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField] private int _doorNumber;
     [SerializeField] private float _speed;
     [SerializeField] private float _moveDistance;
     [SerializeField] private bool _onlyOpen;
@@ -60,6 +61,16 @@ public class Door : MonoBehaviour
         }
     }
 
+    public void CloseDoor()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Close());
+        CablesOff();
+        
+        if (_doorLight)
+                _doorLight.color = _inactiveColor;
+    }
+    
     IEnumerator Close()
     {
         if (!_onlyOpen && _isOpen)
@@ -70,19 +81,7 @@ public class Door : MonoBehaviour
                 transform.position += transform.up * (_speed * Time.deltaTime);
                 yield return new WaitForEndOfFrame();
             }
-
-            
         }
-    }
-
-    public void CloseDoor()
-    {
-        StopAllCoroutines();
-        StartCoroutine(Close());
-        CablesOff();
-        
-        if (_doorLight)
-                _doorLight.color = _inactiveColor;
     }
     
     
@@ -173,5 +172,22 @@ public class Door : MonoBehaviour
     public bool IsOpen()
     {
         return _isOpen;
+    }
+
+    public int GetDoorNumber()
+    {
+        return _doorNumber;
+    }
+
+    public void SetOpenOrClosedStatus(bool status)
+    {
+        if (status)
+        {
+            OpenDoor();
+        }
+        else
+        {
+            CloseDoor();
+        }
     }
 }
