@@ -28,7 +28,7 @@ public class Elevator : MonoBehaviour
             if (!button.IsActive()) return;
 
             count++;
-            
+
             if (count == _buttons.Count)
                 StartCoroutine(Move());
         }

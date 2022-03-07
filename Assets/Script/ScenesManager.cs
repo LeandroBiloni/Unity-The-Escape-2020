@@ -29,6 +29,7 @@ public class ScenesManager : MonoBehaviour
     }
     public void LoseScreen()
     {
+        Debug.Log("lose");
         SceneManager.LoadScene("Lose");
     }
 
