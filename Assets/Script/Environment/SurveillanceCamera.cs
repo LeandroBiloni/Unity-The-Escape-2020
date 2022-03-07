@@ -31,7 +31,7 @@ public class SurveillanceCamera : MonoBehaviour
 	{
 		_fieldOfView = GetComponentInChildren<FieldOfView>();
 		_startPosition = transform.position;
-		_startRotation = transform.rotation;
+		_startRotation = transform.localRotation;
 		StartCoroutine(CameraRotation(Quaternion.Euler(_targetRotation)));
 	}
 
@@ -60,32 +60,33 @@ public class SurveillanceCamera : MonoBehaviour
 	IEnumerator CameraRotation(Quaternion endValue)
 	{
 		float time = 0;
-		var startValue = transform.rotation;
-
+		var startValue = transform.localRotation;
+		
 		while (time < _rotationSpeed)
 		{
-			transform.rotation = Quaternion.Lerp(startValue, endValue, time / _rotationSpeed);
+			transform.localRotation = Quaternion.Lerp(startValue, endValue, time / _rotationSpeed);
+			//transform.rotation.x = 0;
 			time += Time.deltaTime;
 			yield return null;
 		}
 
-		transform.rotation = endValue;
+		transform.localRotation = endValue;
 		StartCoroutine(CameraRotateBack());
 	}
 
 	IEnumerator CameraRotateBack()
 	{
 		float time = 0;
-		var startValue = transform.rotation;
+		var startValue = transform.localRotation;
 
 		while (time < _rotationSpeed)
 		{
-			transform.rotation = Quaternion.Lerp(startValue, _startRotation, time / _rotationSpeed);
+			transform.localRotation = Quaternion.Lerp(startValue, _startRotation, time / _rotationSpeed);
 			time += Time.deltaTime;
 			yield return null;
 		}
 
-		transform.rotation = _startRotation;
+		transform.localRotation = _startRotation;
 		_moving = false;
 
 		StopCoroutine(CameraRotateBack());
@@ -101,7 +102,7 @@ public class SurveillanceCamera : MonoBehaviour
 	{
 		_moving = true;
 		transform.position = _startPosition;
-		transform.rotation = _startRotation;
+		transform.localRotation = _startRotation;
 	}
 
 	private void CheckFov()
