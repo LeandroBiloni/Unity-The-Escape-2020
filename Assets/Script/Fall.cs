@@ -17,13 +17,5 @@ public class Fall : MonoBehaviour
 			Debug.Log("Se cayo el player");
 			scenesManager.LoseScreen();
 		}
-
-		if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-		{
-			Debug.Log("Se cayo el enemigo");
-
-			scenesManager.LoseScreen();
-		}
-
 	}
 }
