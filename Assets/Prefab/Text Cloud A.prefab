@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3898560241678503168}
   - component: {fileID: 8161656785657950010}
   - component: {fileID: 5335842269383569738}
-  - component: {fileID: 6176298229191118519}
   m_Layer: 0
   m_Name: Text Cloud A
   m_TagString: Untagged
@@ -204,15 +203,3 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_maskType: 0
---- !u!114 &6176298229191118519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6350197620525351345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e97d2ca73eefb4f98f1d0341bfd552, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

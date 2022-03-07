@@ -50,6 +50,9 @@ public class FieldOfView : MonoBehaviour
 		for (int i = 0; i < targetInViewRadius.Length; i++)
 		{
 			GameObject target = targetInViewRadius[i].gameObject;
+			
+			if (target == gameObject) continue;
+			
 			Vector3 dirToTarget = (target.transform.position - transform.position).normalized;
 
 			if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)

@@ -225,6 +225,8 @@ public class BaseEnemy : Character
     
     protected virtual void OnDrawGizmosSelected()
     {
+        if (_waypoints.Count <= 0) return;
+        
         for (int i = 0; i < _waypoints.Count; i++)
         {
             Gizmos.color = Color.red;

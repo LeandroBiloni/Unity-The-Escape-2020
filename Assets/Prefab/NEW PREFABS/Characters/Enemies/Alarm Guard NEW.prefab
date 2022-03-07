@@ -623,6 +623,7 @@ MonoBehaviour:
   _waypoints: []
   _particle: {fileID: 5656033178505712833}
   _interactionIcon: {fileID: 0}
+  _blindIcon: {fileID: 0}
   _talkTime: 0
 --- !u!1 &1679160061478726235
 GameObject:
@@ -7309,6 +7310,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Selection Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 1848396555222585994, guid: 27db2beb32d718d49a7e36786df3a820,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3673129995841980237, guid: 27db2beb32d718d49a7e36786df3a820,
         type: 3}

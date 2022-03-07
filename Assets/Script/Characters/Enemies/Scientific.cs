@@ -13,7 +13,7 @@ public class Scientific : BaseEnemy
 
     private Vector3 _playerPos;
 
-    private PatrolGuard _guardInFOV;
+    [SerializeField] private PatrolGuard _guardInFOV;
 
 
     protected override void Start()
@@ -134,13 +134,21 @@ public class Scientific : BaseEnemy
     private void CheckGuardInFOV()
     {
         if (_isTalking) return;
-        
         if (_fieldOfView.visibleTargets.Count > 0)
         {
+            
             if (_fieldOfView.visibleTargets[0].tag == "Patrol")
             {
                 _guardInFOV = _fieldOfView.visibleTargets[0].GetComponent<PatrolGuard>();
                 _guardInFOV.InScientificFOV();
+            }
+            else
+            {
+                if (_guardInFOV)
+                {
+                    _guardInFOV.OutOfScientificFOV();
+                }
+                _guardInFOV = null;   
             }
         }
         else
@@ -148,8 +156,8 @@ public class Scientific : BaseEnemy
             if (_guardInFOV)
             {
                 _guardInFOV.OutOfScientificFOV();
-                _guardInFOV = null;
             }
+            _guardInFOV = null; 
         }
     }
 
@@ -178,10 +186,12 @@ public class Scientific : BaseEnemy
         }
         _animator.SetFloat("VelZ", 0);
         _textCloud.SetActive(true);
+        Debug.Log("text active");
+        Debug.Log(_textCloud.activeSelf);
         _navMeshAgent.isStopped = true;
         _navMeshAgent.SetDestination(transform.position);
         _guardInFOV.StartTalk();
-        
+
         yield return new WaitForSeconds(_talkTime);
         _canBeControlled = true;
         _isTalking = false;
@@ -189,5 +199,7 @@ public class Scientific : BaseEnemy
         _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
         _fieldOfView.enabled = true;
         _textCloud.SetActive(false);
+        _guardInFOV.OutOfScientificFOV();
+        _guardInFOV = null;
     }
 }
