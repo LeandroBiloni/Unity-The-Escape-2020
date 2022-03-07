@@ -112,6 +112,7 @@ MonoBehaviour:
   _activationKeyIcon: {fileID: 7200447589598302545}
   _interactionKey: 101
   _cables: []
+  _activationSfx: {fileID: 8300000, guid: 3a6cb720ae6b8a143be484363cc97207, type: 3}
 --- !u!1 &2433318948225457232
 GameObject:
   m_ObjectHideFlags: 0

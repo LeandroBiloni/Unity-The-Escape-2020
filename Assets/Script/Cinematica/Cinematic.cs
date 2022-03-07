@@ -12,6 +12,7 @@ public class Cinematic : MonoBehaviour
     public float timerFirstCinematic;
 
 	static bool alreadyPlayed;
+	static bool alreadyPlayedFinal;
 
 	public delegate void MyCinematic();
 
@@ -30,12 +31,6 @@ public class Cinematic : MonoBehaviour
 		}
 	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     IEnumerator FirstCut()
     {
 	    yield return new WaitForEndOfFrame();
@@ -51,14 +46,19 @@ public class Cinematic : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         this.gameObject.GetComponent<BoxCollider>().enabled = false;
-        cutSceneCam.gameObject.SetActive(true);
-        thePlayer.gameObject.SetActive(false);
-        StartCoroutine(FinishCut());
+		if (!alreadyPlayedFinal)
+		{
+            cutSceneCam.gameObject.SetActive(true);
+            thePlayer.gameObject.SetActive(false);
+            StartCoroutine(FinishCut());
+        }
+    
     }
 
     IEnumerator FinishCut()
     {
-	    OnCinematicStart?.Invoke();
+        alreadyPlayedFinal = true;
+        OnCinematicStart?.Invoke();
 	    thePlayer.gameObject.SetActive(false);
 	    yield return new WaitForSeconds(Wait);
         cutSceneCam.gameObject.SetActive(false);

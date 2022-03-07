@@ -9,9 +9,16 @@ public class Computer : MonoBehaviour
     [SerializeField] private GameObject _activationKeyIcon;
     [SerializeField] private KeyCode _interactionKey;
     [SerializeField] private List<Cable> _cables = new List<Cable>();
-    
-    
-    private void OnTriggerStay(Collider other)
+    [SerializeField] private AudioClip _activationSfx;
+    private AudioManager _audioManager;
+
+	private void Awake()
+	{
+        _audioManager = FindObjectOfType<AudioManager>();
+	}
+
+
+	private void OnTriggerStay(Collider other)
     {
         var scientific = other.gameObject.GetComponent<Scientific>();
 
@@ -32,6 +39,7 @@ public class Computer : MonoBehaviour
 
     private void Activate()
     {
+        _audioManager.PlaySFX(_activationSfx);
         if (_door && !_door.IsOpen())
         {
             _door.OpenDoor();

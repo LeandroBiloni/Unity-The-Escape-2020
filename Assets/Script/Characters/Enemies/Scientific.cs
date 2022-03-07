@@ -9,6 +9,7 @@ public class Scientific : BaseEnemy
     [SerializeField] private GameObject _textCloud;
     [SerializeField] private AlarmComputer _alarm;
     [SerializeField] private Transform _hideSpot; //Para que no active la alarma a cada rato
+    [SerializeField] private AudioClip _talkingSfx;
     private bool _isScared;
     private bool _isRunning;
 
@@ -181,7 +182,7 @@ public class Scientific : BaseEnemy
         _isTalking = true;
         _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
         _fieldOfView.enabled = false;
-        
+        _audioManager.PlaySFX(_talkingSfx);
         StartCoroutine(TalkTimer());
         
         

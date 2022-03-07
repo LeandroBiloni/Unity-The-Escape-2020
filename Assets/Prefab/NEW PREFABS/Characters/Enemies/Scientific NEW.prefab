@@ -1253,6 +1253,7 @@ MonoBehaviour:
   _textCloud: {fileID: 3376141100359183647}
   _alarm: {fileID: 0}
   _hideSpot: {fileID: 0}
+  _talkingSfx: {fileID: 8300000, guid: 7106a3215fba7fc438e73f05fd3efdce, type: 3}
   _guardInFOV: {fileID: 0}
 --- !u!1 &4443903889604446505
 GameObject:
