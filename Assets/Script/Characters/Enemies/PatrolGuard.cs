@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PatrolGuard : BaseEnemy
@@ -9,7 +10,16 @@ public class PatrolGuard : BaseEnemy
     protected override void Start()
     {
         base.Start();
-        _textCloud.SetActive(false);
+
+        List<GameObject> list = new List<GameObject>();
+        
+        list.Add(_selectionIcon);
+        list.Add(_particle.gameObject);
+        list.Add(_interactionIcon);
+        list.Add(_blindIcon);
+        list.Add(_textCloud);
+
+        StartCoroutine(IconsOffOnStart(list));
     }
     // Update is called once per frame
     protected override void Update()

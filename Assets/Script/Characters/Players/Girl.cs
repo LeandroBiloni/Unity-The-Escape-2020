@@ -31,6 +31,12 @@ public class Girl : Character
 
         selector.OnGirlSelect += Select;
         selector.OnBoySelect += Deselect;
+        
+        List<GameObject> list = new List<GameObject>();
+        
+        list.Add(_selectionIcon);
+
+        StartCoroutine(IconsOffOnStart(list));
     }
 
     protected override void Update()

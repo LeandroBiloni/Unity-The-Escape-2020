@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Scientific : BaseEnemy
@@ -20,7 +21,16 @@ public class Scientific : BaseEnemy
     {
         base.Start();
         _canBeControlled = true;
-        _textCloud.SetActive(false);
+
+        List<GameObject> list = new List<GameObject>();
+        
+        list.Add(_selectionIcon);
+        list.Add(_particle.gameObject);
+        list.Add(_interactionIcon);
+        list.Add(_blindIcon);
+        list.Add(_textCloud);
+
+        StartCoroutine(IconsOffOnStart(list));
     }
 
     // Update is called once per frame

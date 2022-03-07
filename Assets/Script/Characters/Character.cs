@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -30,7 +31,6 @@ public class Character : MonoBehaviour
         var cinematic = FindObjectOfType<Cinematic>();
         cinematic.OnCinematicStart += FieldOfViewOff;
         cinematic.OnCinematicEnd += FieldOfViewOn;
-        _selectionIcon.SetActive(false);
         _animator = GetComponent<Animator>();
         _canMove = true;
         _speed = _moveSpeed;
@@ -176,5 +176,15 @@ public class Character : MonoBehaviour
     public void ActivateSelection()
     {
         _selected = true;
+    }
+
+    protected IEnumerator IconsOffOnStart(List<GameObject> objects)
+    {
+        yield return new WaitForEndOfFrame();
+
+        foreach (var go in objects)
+        {
+            if (go) go.SetActive(false);
+        }
     }
 }

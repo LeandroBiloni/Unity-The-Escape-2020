@@ -38,10 +38,6 @@ public class BaseEnemy : Character
         
         if (_waypoints.Count > 0)
             _navMeshAgent.SetDestination(_waypoints[_waypointsIndex].position);
-        
-        if (_particle) _particle.gameObject.SetActive(false);
-        
-        if (_interactionIcon) _interactionIcon.SetActive(false);
     }
 
     protected override void Update()
