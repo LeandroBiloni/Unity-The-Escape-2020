@@ -72,7 +72,9 @@ public class MovingPlatformButton : MonoBehaviour
 		                                                              || other.gameObject.layer ==
 		                                                              LayerMask.NameToLayer("MovableObjects"))
 		{
-			_audioManager.PlaySFX(_activationSound);
+			if(_audioManager)
+				_audioManager.PlaySFX(_activationSound);
+
 			_activated = true;
 			CablesOn();
 		}
@@ -86,7 +88,8 @@ public class MovingPlatformButton : MonoBehaviour
 		                                                              || other.gameObject.layer ==
 		                                                              LayerMask.NameToLayer("MovableObjects"))
 		{
-			_audioManager.PlaySFX(_activationSound);
+			if(_audioManager)
+				_audioManager.PlaySFX(_activationSound);
 
 			_activated = false;
 			CablesOff();
