@@ -52,12 +52,26 @@ public class Cinematic : MonoBehaviour
             thePlayer.gameObject.SetActive(false);
             StartCoroutine(FinishCut());
         }
+		else
+		{
+            cutSceneCam.gameObject.SetActive(false);
+
+            finalCam.gameObject.SetActive(true);
+
+            var multipleCamera = finalCam.GetComponent<CameraMultipleTargets>();
+            var girl = FindObjectOfType<Girl>().transform;
+            var boy = FindObjectOfType<Boy>().transform;
+            multipleCamera.AddTarget(girl);
+            multipleCamera.AddTarget(boy);
+
+            finalCam = Camera.main;
+            OnCinematicEnd?.Invoke();
+        }
     
     }
 
     IEnumerator FinishCut()
     {
-        alreadyPlayedFinal = true;
         OnCinematicStart?.Invoke();
 	    thePlayer.gameObject.SetActive(false);
 	    yield return new WaitForSeconds(Wait);
@@ -72,6 +86,8 @@ public class Cinematic : MonoBehaviour
         multipleCamera.AddTarget(boy);
         
         finalCam = Camera.main;
+        alreadyPlayedFinal = true;
         OnCinematicEnd?.Invoke();
+
     }
 }
