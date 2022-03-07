@@ -81,5 +81,14 @@ public class Memory : MonoBehaviour
         _girlPosition = Vector3.zero;
         _doorsStatus.Clear();
     }
+    
+    public void ResetMemory()
+    {
+        activeLevel = "";
+        checkpointReached = false;
+        _boyPosition = Vector3.zero;
+        _girlPosition = Vector3.zero;
+        _doorsStatus.Clear();
+    }
 
 }

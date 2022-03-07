@@ -41,7 +41,7 @@ public class ScenesManager : MonoBehaviour
     public void Menu()
     {
         Time.timeScale = 1;
-        Memory.Instance.activeLevel = "";
+        Memory.Instance.ResetMemory();
         SceneManager.LoadScene("Menu");
     }
 
