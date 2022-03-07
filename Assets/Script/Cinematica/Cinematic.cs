@@ -63,7 +63,8 @@ public class Cinematic : MonoBehaviour
             var boy = FindObjectOfType<Boy>().transform;
             multipleCamera.AddTarget(girl);
             multipleCamera.AddTarget(boy);
-
+            boy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            boy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
             finalCam = Camera.main;
             OnCinematicEnd?.Invoke();
         }
@@ -82,6 +83,8 @@ public class Cinematic : MonoBehaviour
         var multipleCamera = finalCam.GetComponent<CameraMultipleTargets>();
         var girl = FindObjectOfType<Girl>().transform;
         var boy = FindObjectOfType<Boy>().transform;
+        boy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        boy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
         multipleCamera.AddTarget(girl);
         multipleCamera.AddTarget(boy);
         
