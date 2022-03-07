@@ -9,9 +9,21 @@ public class Fall : MonoBehaviour
 	{
 		scenesManager = FindObjectOfType<ScenesManager>();
 	}
+
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+		if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+		{
+			Debug.Log("Se cayo el player");
 			scenesManager.LoseScreen();
+		}
+
+		if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+		{
+			Debug.Log("Se cayo el enemigo");
+
+			scenesManager.LoseScreen();
+		}
+
 	}
 }
