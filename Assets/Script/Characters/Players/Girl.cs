@@ -11,6 +11,9 @@ public class Girl : Character
 	[SerializeField] private KeyCode _controlEnemyKey;
 	[SerializeField] private float _controlMaxTime;
 	[SerializeField] private float _controlCooldown;
+	[SerializeField] private AudioClip _controlSfx;
+	[SerializeField] private AudioClip _blindSfx;
+	[SerializeField] private AudioClip _deathSfx;
 	private bool _canControlEnemy = true;
 	private bool _controllingEnemy;
 	private bool _inCooldown;
@@ -98,6 +101,7 @@ public class Girl : Character
 	    //If not controlling an enemy controls it.
 	    if (_canControlEnemy)
 	    {
+			_audioManager.PlaySFX(_controlSfx, 1f);
 		    _animator.SetTrigger("Poder");
 		    _controllingEnemy = true;
 		    _canControlEnemy = false;
@@ -188,6 +192,7 @@ public class Girl : Character
 
 	    if (_selectedEnemy)
 	    {
+			_audioManager.PlaySFX(_blindSfx, 1f);
 		    _selectedEnemy.Blind(_controlCooldown);
 		    _animator.SetTrigger("Poder");
 		    _canControlEnemy = false;
@@ -276,6 +281,7 @@ public class Girl : Character
     public override void Dead()
     {
 	    base.Dead();
+		_audioManager.PlaySFX(_deathSfx, 1f);
 	    _canControlEnemy = false;
     }
 

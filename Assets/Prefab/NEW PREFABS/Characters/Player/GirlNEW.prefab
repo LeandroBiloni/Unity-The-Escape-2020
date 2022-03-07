@@ -2404,6 +2404,9 @@ MonoBehaviour:
   _controlEnemyKey: 32
   _controlMaxTime: 10
   _controlCooldown: 5
+  _controlSfx: {fileID: 8300000, guid: 50a93b84efeec5849abc0611321bb21d, type: 3}
+  _blindSfx: {fileID: 8300000, guid: 7679218dd519b2848bb26c4276e829de, type: 3}
+  _deathSfx: {fileID: 8300000, guid: b7637ac0501338f4188b9ebade3884b9, type: 3}
 --- !u!136 &760668340443954380
 CapsuleCollider:
   m_ObjectHideFlags: 0

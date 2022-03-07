@@ -23,6 +23,8 @@ public class Boy : Character
     [Header("Sounds")]
     [SerializeField] private AudioClip _throwBoxSfx;
     [SerializeField] private AudioClip _pullBoxSfx;
+    [SerializeField] private AudioClip _knockBackSfx;
+    [SerializeField] private AudioClip _deathSfx;
 
     private bool _objectsInFov;
     private Transform _currentObject;
@@ -213,6 +215,7 @@ public class Boy : Character
         //FALTA AGREGAR EN EL HUD EL COOLDOWN DEL USO DE PODER 
         //Agregar sonido, animación y efecto(?
         //_animator.SetTrigger("Blast");
+        _audioManager.PlaySFX(_knockBackSfx);
         _knockBackSphere.BlastStart();
 
         _canUsePower = false;
@@ -317,6 +320,7 @@ public class Boy : Character
     public override void Dead()
     {
         base.Dead();
+        _audioManager.PlaySFX(_deathSfx, 1f);
         _canUsePower = false;
     }
 }

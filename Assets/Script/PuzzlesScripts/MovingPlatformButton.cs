@@ -12,6 +12,8 @@ public class MovingPlatformButton : MonoBehaviour
 	[SerializeField] private bool _moveBackward;
 	[SerializeField] private float _speed = 1f;
 	[SerializeField] private List<Cable> _cables = new List<Cable>();
+	[SerializeField] private AudioManager _audioManager;
+	[SerializeField] private AudioClip _activationSound;
 	private bool _activated;
 
 	private MeshRenderer _meshRenderer;
@@ -70,6 +72,7 @@ public class MovingPlatformButton : MonoBehaviour
 		                                                              || other.gameObject.layer ==
 		                                                              LayerMask.NameToLayer("MovableObjects"))
 		{
+			_audioManager.PlaySFX(_activationSound);
 			_activated = true;
 			CablesOn();
 		}
@@ -83,6 +86,8 @@ public class MovingPlatformButton : MonoBehaviour
 		                                                              || other.gameObject.layer ==
 		                                                              LayerMask.NameToLayer("MovableObjects"))
 		{
+			_audioManager.PlaySFX(_activationSound);
+
 			_activated = false;
 			CablesOff();
 		}

@@ -1810,7 +1810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 8
-  viewAngle: 121
+  viewAngle: 90
   targetMask:
     serializedVersion: 2
     m_Bits: 2048
@@ -1851,6 +1851,8 @@ MonoBehaviour:
   _knockBackSphere: {fileID: 2486904194814615950}
   _throwBoxSfx: {fileID: 8300000, guid: 7608cca404f3a02419835edabe3fdcf9, type: 3}
   _pullBoxSfx: {fileID: 8300000, guid: b227296f077554844acfe07b84c42103, type: 3}
+  _knockBackSfx: {fileID: 0}
+  _deathSfx: {fileID: 8300000, guid: 6f060c22e9101da44acf762801b35d6d, type: 3}
 --- !u!136 &2188645097967248387
 CapsuleCollider:
   m_ObjectHideFlags: 0
