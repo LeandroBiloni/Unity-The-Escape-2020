@@ -320,6 +320,7 @@ public class Boy : Character
     public override void Dead()
     {
         base.Dead();
+        Debug.Log("dead chico");
         _audioManager.PlaySFX(_deathSfx, 1f);
         _canUsePower = false;
     }

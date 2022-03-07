@@ -147,14 +147,22 @@ public class Character : MonoBehaviour
 
     public void FieldOfViewOn()
     {
-        _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
-        _fieldOfView.enabled = true;
+        if (_fieldOfView)
+        {
+            _fieldOfView.viewMeshFilter.gameObject.SetActive(true);
+            _fieldOfView.enabled = true; 
+        }
+        
     }
 
     public void FieldOfViewOff()
     {
-        _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
-        _fieldOfView.enabled = false;
+        if (_fieldOfView)
+        {
+            _fieldOfView.viewMeshFilter.gameObject.SetActive(false);
+            _fieldOfView.enabled = false;
+        }
+        
     }
 
     public void StopMovement()

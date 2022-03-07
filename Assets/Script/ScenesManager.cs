@@ -40,6 +40,7 @@ public class ScenesManager : MonoBehaviour
     public void Menu()
     {
         Time.timeScale = 1;
+        Memory.Instance.activeLevel = "";
         SceneManager.LoadScene("Menu");
     }
 
